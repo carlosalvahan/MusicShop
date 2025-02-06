@@ -1,1 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import "bootswatch/dist/lux/_variables";
+@import "bootswatch/dist/lux/bootstrap.min.css";
+// @import "bootswatch/dist/lux/bootstrap.css";
+// @import 'bootstrap/scss/bootstrap';
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.1rem rgba(26, 26, 26, .25) !important;
+}

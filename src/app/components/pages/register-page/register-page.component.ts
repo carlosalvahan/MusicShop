@@ -4,17 +4,22 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { RegisterService } from './services/register.service';
 import { ToastService } from '../../shared/toast-service';
 import { Router } from '@angular/router';
+import { FormMapper } from '../../shared/form-mapper/form-mapper';
 
 @Component({
   selector: 'app-register-page',
   standalone: true,
   imports: [ReactiveFormsModule, NgClass],
-  providers: [RegisterService],
+  providers: [RegisterService, FormMapper],
   templateUrl: './register-page.component.html',
   styleUrl: './register-page.component.scss'
 })
 export class RegisterPageComponent {
-  constructor(private regService: RegisterService, private toastService: ToastService, private router: Router) {
+  constructor(private regService: RegisterService, 
+    private toastService: ToastService, 
+    private router: Router,
+    private formMapper: FormMapper
+  ) {
 
   }
   showLoader:boolean = false;
@@ -32,17 +37,12 @@ export class RegisterPageComponent {
 
   formSubmit() {
     this.showLoader = true;
-    interface stringKeys {
-      [index: string]: string;
-    }
-    let reqBody = {} as stringKeys;
-    Object.keys(this.registrationForm.controls).forEach(key => {
-      reqBody[key] = this.registrationForm.get(key)?.value;
-    });
+    const reqBody = this.formMapper.mapForm(this.registrationForm);
     this.regService.userRegister(reqBody).subscribe((res: any) => {
       setTimeout(() => {
         this.showToast(res.message, 'success');
         this.showLoader = false;
+        this.router.navigateByUrl('/login')
       }, 2000);
     }, (e) => {
       setTimeout(() => {

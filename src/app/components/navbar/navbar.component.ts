@@ -17,8 +17,8 @@ export class NavbarComponent implements OnInit{
   ];
 
   readonly guestTabs = [
-    {label: 'Instruments', path: '/instruments'},
     {label: 'About us', path: ''},
+    {label: 'Contact Us', path: '/instruments'},
   ];
 
   readonly loggedInUserTabs = [

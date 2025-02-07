@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterLinkActive, RouterLink, RouterModule } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { RouterLinkActive, RouterLink, RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -8,6 +8,30 @@ import { RouterLinkActive, RouterLink, RouterModule } from '@angular/router';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit{
+  constructor(private router: Router) {}
+  readonly adminTabs = [
+    {label: 'Users', path: ''},
+    {label: 'Orders', path: '/orders'},
+    {label: 'Instruments', path: '/instruments'}
+  ];
 
+  readonly guestTabs = [
+    {label: 'Instruments', path: '/instruments'},
+    {label: 'About us', path: ''},
+  ];
+
+  readonly loggedInUserTabs = [
+    {label: 'Instruments', path: '/instruments'},
+    {label: 'Orders', path: '/orders'},
+  ];
+
+  navItems = this.guestTabs;
+  ngOnInit() {
+    // this.navItems = Object.assign([], this.guestTabs);
+  }
+
+  navigateTo(path: string) {
+    this.router.navigateByUrl(path);
+  }
 }

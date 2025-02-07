@@ -1,0 +1,35 @@
+<div class="row h-100">
+    <div class="col-3"></div>
+    <div class="col-6 bg-secondary d-flex align-items-center justify-content-center">
+        <form [formGroup]="loginForm">
+            <div class="row my-2 border border-secondary py-2 position-relative" [ngClass]="{'opacity-50': showLoader}">
+                <div class="col-12 pt-2">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="username" placeholder="Username" formControlName="userName">
+                        <label for="username">Username</label>
+                      </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control" id="password" placeholder="password" formControlName="password">
+                        <label for="password">Password</label>
+                      </div>
+                </div>
+                <div class="col-12 text-end">
+                    <button class="btn btn-outline-primary me-2">Confirm</button>
+                    <button class="btn btn-outline-danger">Cancel</button>
+                </div>
+                @if(showLoader) {
+                    <div class="spinner-container position-absolute top-0 w-100 h-100 d-flex align-items-center justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only"></span>
+                          </div>
+                    </div>
+                }
+            </div>
+            
+        </form>
+       
+    </div>
+    <div class="col-3"></div>
+</div>

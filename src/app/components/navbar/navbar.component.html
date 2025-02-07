@@ -7,20 +7,18 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarColor01">
             <ul class="navbar-nav me-auto">
+                @for (navItem of navItems; track navItem.label) {
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/" routerLinkActive="activebutton">Instruments
-                        <span class="visually-hidden">(current)</span>
+                    <a class="nav-link" [routerLink]="navItem.path">{{navItem.label}}
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/orders" routerLinkActive="activebutton" disabled>Orders</a>
-                </li>
+                }
             </ul>
             <form class="d-flex">
-                <button class="btn btn-outline-success me-2" routerLink="/" routerLinkActive="activebutton">Login</button>
-                <button class="btn btn-outline-secondary">
-                    <a class="nav-link" routerLink="/register" routerLinkActive="activebutton">Register
-                    </a>
+                <button class="btn btn-outline-success me-2" (click)="navigateTo('/login')">
+                    Login</button>
+                <button class="btn btn-outline-secondary" (click)="navigateTo('/register')">
+                    Register
                 </button>
             </form>
         </div>

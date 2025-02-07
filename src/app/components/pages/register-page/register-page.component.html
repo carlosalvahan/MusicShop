@@ -1,61 +1,74 @@
-<div class="row justify-content-center my-2">
-    <div class="col-6 bg-secondary py-2 border border-secondary">
-        <div class="row">
-            <div class="col-12">
-                <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                    <label for="floatingInput">Username</label>
-                  </div>
+<div class="row h-100">
+    <div class="col-3"></div>
+    <div class="col-6 bg-secondary d-flex align-items-center justify-content-center">
+        <form [formGroup]="registrationForm">
+            <div class="row my-2 border border-secondary py-2 position-relative" [ngClass]="{'opacity-50': showLoader}">
+                <div class="col-12">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="username" placeholder="Username" formControlName="userName">
+                        <label for="username">Username</label>
+                      </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control" id="password" placeholder="password" formControlName="password">
+                        <label for="password">Password</label>
+                      </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control" id="passwordConfirm" placeholder="passwordConfirm" formControlName="confirmPassword">
+                        <label for="passwordConfirm">Confirm Password</label>
+                      </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="firstName" placeholder="First Name" formControlName="firstName">
+                        <label for="firstName">First Name</label>
+                      </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="lastName" placeholder="Last Name" formControlName="lastName">
+                        <label for="lastName">Last Name</label>
+                      </div>
+                </div>
+                <div class="col-8">
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="email" placeholder="name@example.com" formControlName="email">
+                        <label for="email">Email address</label>
+                      </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="mobileNum" placeholder="mobileNum" formControlName="phoneNumber">
+                        <label for="mobileNum">Mobile number</label>
+                      </div>
+                </div>
+                <div class="col-12 mb-2">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="address" placeholder="address" formControlName="address">
+                        <label for="address">Address</label>
+                      </div>
+                </div>
+                <div class="col-6 d-flex align-items-center">
+                    <span class="text-info">* All fields are required</span>
+                </div>
+                <div class="col-6 text-end">
+                    <button class="btn btn-outline-primary me-2" (click)="formSubmit()">Confirm</button>
+                    <button class="btn btn-outline-danger" (click)="formCancel()">Cancel</button>
+                </div>
+                @if(showLoader) {
+                    <div class="spinner-container position-absolute top-0 w-100 h-100 d-flex align-items-center justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only"></span>
+                          </div>
+                    </div>
+                }
             </div>
-            <div class="col-12">
-                <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                    <label for="floatingInput">Password</label>
-                  </div>
-            </div>
-            <div class="col-12">
-                <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                    <label for="floatingInput">Confirm Password</label>
-                  </div>
-            </div>
-            <div class="col-8">
-                <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                    <label for="floatingInput">Email address</label>
-                  </div>
-            </div>
-            <div class="col-4">
-                <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                    <label for="floatingInput">Mobile number</label>
-                  </div>
-            </div>
-            <div class="col-6">
-                <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                    <label for="floatingInput">First Name</label>
-                  </div>
-            </div>
-            <div class="col-6">
-                <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                    <label for="floatingInput">Last Name</label>
-                  </div>
-            </div>
-            <div class="col-12 mb-2">
-                <div class="form-floating">
-                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                    <label for="floatingInput">Address</label>
-                  </div>
-            </div>
-            <div class="col-6 d-flex align-items-center">
-                <span class="text-info">* All fields are required</span>
-            </div>
-            <div class="col-6 text-end">
-                <button class="btn btn-outline-primary me-2">Confirm</button>
-                <button class="btn btn-outline-danger">Cancel</button>
-            </div>
-        </div>
+            
+        </form>
+       
     </div>
+    <div class="col-3"></div>
 </div>

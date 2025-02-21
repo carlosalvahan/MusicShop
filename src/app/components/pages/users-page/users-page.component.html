@@ -1,1 +1,18 @@
-<p>users-page works!</p>
+<div class="d-flex flex-column h-100">
+    <div class="row my-2">
+        <div class="col-12">
+            Manage Users <i class="bi bi-people-fill"></i>
+        </div>
+    </div>
+    <div class="row flex-fill">
+        <div class="col-12">
+            @if((userListState$ | async); as userListState) {
+                @if(!userListState.isLoading) {
+                    <app-grid [rowData]="userListState.userList" [colData]="colData" (gridButtonClicked)="gridButtonClicked($event)"></app-grid>
+                } @else {
+                    <app-loader></app-loader>
+                }
+            }
+        </div>
+    </div>
+</div>

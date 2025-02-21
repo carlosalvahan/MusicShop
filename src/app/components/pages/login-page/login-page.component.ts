@@ -1,25 +1,33 @@
-import { NgClass } from '@angular/common';
-import { Component } from '@angular/core';
+import { CommonModule, NgClass } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoginService } from './services/login.service';
 import { FormMapper } from '../../shared/form-mapper/form-mapper';
-import { ToastService } from '../../shared/toast-service';
+import { ToastService } from '../../shared/toast/toast-service';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { UserActions } from '../../../store/user/user-actions';
+import { StorageService } from '../../shared/storage/storage-service';
+import { sessionKeys } from '../../../app.constants';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass],
-  providers: [LoginService, FormMapper],
+  imports: [ReactiveFormsModule, NgClass, CommonModule],
+  providers: [FormMapper],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'
 })
 export class LoginPageComponent {
+  private store = inject(Store);
   constructor(private loginService: LoginService, 
     private formMapper: FormMapper,
     private toastService: ToastService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private storageService: StorageService
+  ) {
+  }
   showLoader:boolean = false;
   loginForm = new FormGroup({
       userName: new FormControl('', Validators.required),
@@ -30,12 +38,19 @@ export class LoginPageComponent {
     this.showLoader = true;
     const reqBody = this.formMapper.mapForm(this.loginForm);
     this.loginService.userLogin(reqBody).subscribe(res => {
-      console.log(res);
       setTimeout(() => {
         const toastMessage = `Welcome Back ${res.result.user.name}`;
         this.showToast(toastMessage, 'success');
         this.showLoader = false;
-        this.router.navigateByUrl('')
+        this.store.dispatch(UserActions.loggedIn({ user: res?.result?.user }));
+        this.storageService.assignItemToSession(sessionKeys.authToken,res?.result?.token);
+        const sessionRole = JSON.stringify(res?.result?.user);
+        this.storageService.assignItemToSession(sessionKeys.userPerm, sessionRole);
+        if(res?.result?.user?.role?.toLowerCase() === 'admin') {
+          this.router.navigateByUrl('users');
+        } else {
+          this.router.navigateByUrl('instruments');
+        }
       }, 2000);
     }, (e) => {
       setTimeout(() => {

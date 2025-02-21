@@ -2,7 +2,7 @@ import { NgClass } from '@angular/common';
 import { Component, TemplateRef } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { RegisterService } from './services/register.service';
-import { ToastService } from '../../shared/toast-service';
+import { ToastService } from '../../shared/toast/toast-service';
 import { Router } from '@angular/router';
 import { FormMapper } from '../../shared/form-mapper/form-mapper';
 

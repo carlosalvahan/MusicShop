@@ -14,7 +14,7 @@ export class ToastService {
         if(!toast.message) {
             toast.message = '';
         }
-        toast.classname += 'bg-' + type;
+        toast.classname += ' bg-' + type;
         if(type !== 'secondary') {
             toast.classname += ' text-white';
         }   

@@ -6,7 +6,7 @@ import type { ColDef } from 'ag-grid-community';
 import { Store } from '@ngrx/store';
 import { UserListActions } from '../../../store/user-list/user-list-actions';
 import { Observable } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { LoaderComponent } from '../../shared/loader/loader.component';
 import { userListState } from '../../../store/user-list/user-list-model';
 import { UserListService } from './services/user-list.service';
@@ -18,7 +18,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-users-page',
   standalone: true,
-  imports: [ACGridComponent, AsyncPipe, LoaderComponent, ModalComponent],
+  imports: [ACGridComponent, AsyncPipe, LoaderComponent, ModalComponent, NgClass],
   templateUrl: './users-page.component.html',
   providers: [ColumnModelMapper, UserListService, NgbModal],
   styleUrl: './users-page.component.scss'
@@ -44,32 +44,42 @@ export class UsersPageComponent implements OnInit {
   }
 
   gridButtonClicked(e: ButtonOutput) {
-    // this.store.dispatch(UserListActions.userLoading({ loading: true }));
-    // this.userService.deleteUser(e.data.id).subscribe({
-    //   next: (res: any) => {
-    //     if (res?.isSuccess) {
-    //       this.toast.show({ message: res?.message }, 'success');
-    //       this.store.dispatch(UserListActions.deleteUser({ id: e?.data?.id }));
-    //     } else {
-    //       this.toast.show({ message: 'Something went wrong' }, 'danger');
-    //       this.store.dispatch(UserListActions.userLoading({ loading: false }));
-    //     }
-    //   },
-    //   error: (e) => {
-    //     this.toast.show({ message: e?.error?.message }, 'danger');
-    //     this.store.dispatch(UserListActions.userLoading({ loading: false }));
-    //   }
-    // });
+    switch(e.type) {
+      case 'delete': this.deleteUserConfirm(e?.data);break;
+      case 'edit': this.store.dispatch(UserListActions.userLoading({ loading: true }));break;
+      default: 
+    }
+  }
+
+  deleteUserConfirm(data: any) {
     this.modalContent = {
       ...this.modalContent,
       message: 'Are you sure you want to continue?',
       title: 'Delete user'
     }
-    // this.modalService.setTemplate(this.modalContent);
-    this.modalService.open(this.modalContent, {size: 'sm'}).result.then(res => {
-      console.log(res);
-    }, (e) => {
-      console.log(e)
+    this.modalService.open(this.modalContent, { size: 'sm' }).result.then(res => {
+      if (res) {
+        this.deleteUser(data);
+      }
+    }, (e) => {});
+  }
+
+  deleteUser(data: any) {
+    this.store.dispatch(UserListActions.userLoading({ loading: true }));
+    this.userService.deleteUser(data.id).subscribe({
+      next: (res: any) => {
+        if (res?.isSuccess) {
+          this.toast.show({ message: res?.message }, 'success');
+          this.store.dispatch(UserListActions.deleteUser({ id: data?.id }));
+        } else {
+          this.toast.show({ message: 'Something went wrong' }, 'danger');
+          this.store.dispatch(UserListActions.userLoading({ loading: false }));
+        }
+      },
+      error: (e) => {
+        this.toast.show({ message: e?.error?.message }, 'danger');
+        this.store.dispatch(UserListActions.userLoading({ loading: false }));
+      }
     });
   }
 

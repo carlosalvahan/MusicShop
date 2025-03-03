@@ -1,12 +1,12 @@
 <ng-template #modalTemplate let-modal>
 	<div class="modal-header">
 		<h4 class="modal-title" id="modal-basic-title">{{ content.title }}</h4>
-		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss(false)"></button>
 	</div>
 	<div class="modal-body">{{ content.message }}
 	</div>
 	<div class="modal-footer">
-		<button type="button" class="btn btn-outline-primary" (click)="modal.close('Save click')">{{ content.confirmText }}</button>
-        <button type="button" class="btn btn-outline-secondary" (click)="modal.close('Cancel click')">{{ content.cancelText }}</button>
+		<button type="button" class="btn btn-outline-primary" (click)="modal.close(true)">{{ content.confirmText }}</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="modal.close(false)">{{ content.cancelText }}</button>
 	</div>
 </ng-template>

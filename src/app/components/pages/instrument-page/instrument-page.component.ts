@@ -1,12 +1,35 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { FilterGroup, FilterItem, SideFilterComponent } from '../../shared/side-filter/side-filter.component';
+import { InstrumentService } from './services/instrument-service';
+import { instrumentTypes, manufacturers } from './services/instrument-mock';
+import { forkJoin, Observable } from 'rxjs';
+import { InstrumentListComponent } from './instrument-list/instrument-list.component';
 
 @Component({
   selector: 'app-instrument-page',
   standalone: true,
-  imports: [],
+  imports: [SideFilterComponent, InstrumentListComponent],
   templateUrl: './instrument-page.component.html',
+  providers: [InstrumentService],
   styleUrl: './instrument-page.component.scss'
 })
-export class InstrumentPageComponent {
+export class InstrumentPageComponent implements OnInit{
+  instrumentService = inject(InstrumentService);
+  allFilters: FilterGroup[] = [];
+  filterSubs: Observable<any>[] = [];
 
+  ngOnInit(): void {
+    this.filterSubs = [this.instrumentService.getManufacturers(), this.instrumentService.getInstrumentTypes()]
+    forkJoin(this.filterSubs).subscribe({
+      next: (res) => {
+        console.log(res);
+      }, 
+      error: (err) => {
+        const manufacturerGroup =  new FilterGroup('manufacturers', manufacturers);
+        const instrumentTypeGroup = new FilterGroup('types', instrumentTypes);
+        this.allFilters = [manufacturerGroup, instrumentTypeGroup]
+      }
+    })
+  }
 }
+

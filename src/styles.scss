@@ -7,6 +7,15 @@
 // @import "bootswatch/dist/lux/bootstrap.css";
 // @import 'bootstrap/scss/bootstrap';
 
-.form-control:focus {
+.form-control:focus, .accordion-button:focus {
     box-shadow: 0 0 0 0.1rem rgba(26, 26, 26, .25) !important;
+}
+
+.form-control {
+    border: 1px solid #ced4da;
+}
+
+.accordion-button:not(.collapsed)  {
+    background: white;
+    font-weight: 700;
 }

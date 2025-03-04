@@ -9,9 +9,13 @@ import { adminOnlyRoute, loggedInGuard } from './app-guards';
 export const routes: Routes = [
     {path: '', component: InstrumentPageComponent},
     {path: 'instruments', component: InstrumentPageComponent},
-    {path: 'orders', component: OrdersPageComponent, canActivate:[loggedInGuard, adminOnlyRoute]},
+    {path: 'orders', component: OrdersPageComponent, 
+        canActivate:[adminOnlyRoute]
+    },
     {path: 'register', component: RegisterPageComponent},
     {path: 'login', component: LoginPageComponent},
-    {path: 'users', component: UsersPageComponent, canActivate:[loggedInGuard, adminOnlyRoute]},
+    {path: 'users', component: UsersPageComponent, 
+        canActivate:[adminOnlyRoute]
+    },
     {path: '**', component: OrdersPageComponent}
 ];

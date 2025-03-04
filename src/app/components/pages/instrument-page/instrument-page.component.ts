@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FilterGroup, FilterItem, SideFilterComponent } from '../../shared/side-filter/side-filter.component';
+import { FilterGroup, SideFilterComponent } from '../../shared/side-filter/side-filter.component';
 import { InstrumentService } from './services/instrument-service';
-import { instrumentTypes, manufacturers } from './services/instrument-mock';
+import { brands, instrumentTypes } from './services/instrument-mock';
 import { forkJoin, Observable } from 'rxjs';
 import { InstrumentListComponent } from './instrument-list/instrument-list.component';
 
@@ -25,7 +25,7 @@ export class InstrumentPageComponent implements OnInit{
         console.log(res);
       }, 
       error: (err) => {
-        const manufacturerGroup =  new FilterGroup('manufacturers', manufacturers);
+        const manufacturerGroup =  new FilterGroup('brands', brands);
         const instrumentTypeGroup = new FilterGroup('types', instrumentTypes);
         this.allFilters = [manufacturerGroup, instrumentTypeGroup]
       }

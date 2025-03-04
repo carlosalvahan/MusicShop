@@ -1,5 +1,5 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { RouterLinkActive, RouterLink, RouterModule, Router } from '@angular/router';
+import { afterNextRender, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { RouterLinkActive, RouterLink, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { UserModel } from '../../store/user/user-model';
@@ -17,9 +17,8 @@ import { sessionKeys } from '../../app.constants';
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent implements OnInit, OnDestroy {
-  constructor(private router: Router, private globalService: StorageService) { }
   readonly adminTabs = [
-    { label: 'Users', path: '' },
+    { label: 'Users', path: '/users' },
     { label: 'Orders', path: '/orders' },
     { label: 'Instruments', path: '/instruments' }
   ];
@@ -40,11 +39,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
   loggedInUser$!: Observable<UserModel>;
   subList: Subscription[] = [];
   sessionUser: string = '';
+
+  constructor(private router: Router, private globalService: StorageService) {
+    afterNextRender(() => {
+      this.sessionUser = this.storageService.getItemFromSession<string>(sessionKeys.userPerm) || '';
+      if (this.sessionUser) {
+        this.store.dispatch(UserActions.loggedIn({ user: JSON.parse(this.sessionUser) }));
+      }
+    });
+   }
+
   ngOnInit() {
-    this.sessionUser = this.storageService.getItemFromSession<string>(sessionKeys.userPerm) || '';
-    if (this.sessionUser) {
-      this.store.dispatch(UserActions.loggedIn({ user: JSON.parse(this.sessionUser) }));
-    }
     this.loggedInUser$ = this.store.select('user');
     this.subList.push(
       this.loggedInUser$.subscribe(res => {
@@ -64,6 +69,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   logoutClicked() {
     this.store.dispatch(UserActions.loggedOut());
     this.globalService.removeItemFromSession(sessionKeys.authToken);
+    this.globalService.removeItemFromSession(sessionKeys.userPerm);
     this.navigateTo('login');
   }
 

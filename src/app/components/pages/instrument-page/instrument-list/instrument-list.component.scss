@@ -1,0 +1,12 @@
+.list-container {
+    max-height: calc(100vh - 8.9rem);
+    overflow-y: auto;
+}
+
+.img-placeholder {
+    min-width: 200px;
+    min-height: 150px;
+    &>.placeholder {
+        min-height: 150px;
+    }
+}

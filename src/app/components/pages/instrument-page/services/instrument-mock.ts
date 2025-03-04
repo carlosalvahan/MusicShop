@@ -1,4 +1,4 @@
-export const manufacturers = [
+export const brands = [
     {
         label: 'Gibsons',
         value: true

@@ -9,7 +9,6 @@ import { Store } from '@ngrx/store';
 import { UserActions } from '../../../store/user/user-actions';
 import { StorageService } from '../../shared/storage/storage-service';
 import { sessionKeys } from '../../../app.constants';
-import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-login-page',

@@ -8,7 +8,7 @@ import { NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 	imports: [NgbToastModule],
     standalone:true,
 	template: `
-		@for (toast of toastService.toasts; track toast) {
+		@for (toast of toastService.toasts; track toast.message) {
 			<ngb-toast
 				[class]="toast.classname"
 				[autohide]="true"

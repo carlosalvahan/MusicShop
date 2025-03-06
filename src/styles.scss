@@ -19,3 +19,10 @@
     background: white;
     font-weight: 700;
 }
+
+.card:hover {
+    transform: scale(1.05);
+    background: lighten(yellow,45%);
+    border-width: 3px;
+    transition: transform 1s;
+}

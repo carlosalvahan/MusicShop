@@ -9,7 +9,7 @@
             <ul class="navbar-nav me-auto">
                 @for (navItem of navItems; track navItem.label) {
                 <li class="nav-item">
-                    <a class="nav-link" [routerLink]="navItem.path">{{navItem.label}}
+                    <a class="nav-link" [routerLink]="navItem.path" routerLinkActive="text-warning fw-bolder">{{navItem.label}}
                     </a>
                 </li>
                 }

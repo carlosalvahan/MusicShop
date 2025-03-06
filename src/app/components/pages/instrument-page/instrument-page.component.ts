@@ -1,9 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FilterGroup, SideFilterComponent } from '../../shared/side-filter/side-filter.component';
 import { InstrumentService } from './services/instrument-service';
-import { brands, instrumentTypes } from './services/instrument-mock';
 import { forkJoin, Observable } from 'rxjs';
 import { InstrumentListComponent } from './instrument-list/instrument-list.component';
+import { UserModel } from '../../../store/user/user-model';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-instrument-page',
@@ -22,12 +23,12 @@ export class InstrumentPageComponent implements OnInit{
     this.filterSubs = [this.instrumentService.getManufacturers(), this.instrumentService.getInstrumentTypes()]
     forkJoin(this.filterSubs).subscribe({
       next: (res) => {
-        console.log(res);
+        const manufacturerGroup =  new FilterGroup('brands', res[0]);
+        const instrumentTypeGroup = new FilterGroup('types', res[1]);
+        this.allFilters = [manufacturerGroup, instrumentTypeGroup]
       }, 
       error: (err) => {
-        const manufacturerGroup =  new FilterGroup('brands', brands);
-        const instrumentTypeGroup = new FilterGroup('types', instrumentTypes);
-        this.allFilters = [manufacturerGroup, instrumentTypeGroup]
+        console.log(err);
       }
     })
   }

@@ -1,0 +1,26 @@
+[
+    { 
+        "label": "Guitar",
+        "value": true 
+    },
+    { 
+        "label": "Keyboard",
+        "value": true 
+    },
+    { 
+        "label": "Cello",
+        "value": true 
+    },
+    { 
+        "label": "Flute",
+        "value": true 
+    },
+    { 
+        "label": "Clarinet",
+        "value": true 
+    },
+    { 
+        "label": "French Horn",
+        "value": true 
+    }
+]

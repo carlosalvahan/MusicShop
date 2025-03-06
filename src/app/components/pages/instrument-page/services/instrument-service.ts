@@ -8,10 +8,10 @@ export class InstrumentService {
     private httpClient = inject(HttpClient);
 
     getManufacturers(): Observable<any> {
-       return this.httpClient.get('../../../../mockdata/manufacturers.json')
+       return this.httpClient.get('assets/mock-data/manufacturers.json');
     }
 
     getInstrumentTypes(): Observable<any> {
-        return this.httpClient.get('../../../../mockdata/manufacturers.json')
+      return this.httpClient.get('assets/mock-data/types.json');
      }
 }

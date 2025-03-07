@@ -3,8 +3,6 @@ import { FilterGroup, SideFilterComponent } from '../../shared/side-filter/side-
 import { InstrumentService } from './services/instrument-service';
 import { forkJoin, Observable } from 'rxjs';
 import { InstrumentListComponent } from './instrument-list/instrument-list.component';
-import { UserModel } from '../../../store/user/user-model';
-import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-instrument-page',

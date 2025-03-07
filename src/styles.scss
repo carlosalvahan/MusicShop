@@ -25,4 +25,9 @@
     background: lighten(yellow,45%);
     border-width: 3px;
     transition: transform 1s;
+    cursor: pointer;
+}
+
+.btn-outline-warning:hover {
+    color:white !important;
 }

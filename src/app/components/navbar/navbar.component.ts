@@ -24,8 +24,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ];
 
   readonly guestTabs = [
-    { label: 'About us', path: '' },
-    { label: 'Contact Us', path: '/instruments' },
+    { label: 'Instruments', path: '/instruments' },
+    { label: 'About us', path: '/about' },
+    { label: 'Contact Us', path: '/contact' },
   ];
 
   readonly loggedInUserTabs = [

@@ -3,13 +3,20 @@
 }
 
 .action-buttons { 
-    position: absolute;
-    top: 5px;
-    right: 5px;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .card-img-top {
     min-width: 100%;
     min-height: 100%;
 }
+
+.btn-outline-warning {
+    text-transform: none;
+}
+
+
 

@@ -1,15 +1,17 @@
-<div class="card" (click)="openDetails()">
-    <img class="card-img-top" [src]="imgSrc" alt="Card image cap">
-    <div class="card-body">
-        <h5 class="card-title">Guitar Name</h5>
-        <div class="card-text">
-            $ 15,000
-        </div>
-        <div class="action-buttons">
-            <button type="button" class="btn btn-outline-warning py-1 px-2" (click)="addtoCart($event)">Add to Cart<i class="ms-2 bi bi-cart-plus"></i></button>
+@if(instrument()) {
+    <div class="card h-100" (click)="openDetails(instrument().id)">
+        <img class="card-img-top" [src]="imgSrc" alt="Card image cap">
+        <div class="card-body d-flex flex-column">
+            <h5 class="card-title" [ngbTooltip]="instrument().name" [openDelay]="300" >{{ instrument().name }}</h5>
+            <div class="card-text">
+                {{ instrument().price | currency }}
+            </div>
+            <div class="action-buttons flex-fill">
+                <button type="button" class="btn btn-outline-warning py-1 px-2" (click)="addtoCart($event)">Add to Cart<i class="ms-2 bi bi-cart-plus"></i></button>
+            </div>
         </div>
     </div>
-</div>
+}
 
 
 

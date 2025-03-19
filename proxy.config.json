@@ -1,12 +1,20 @@
 {
-    "/api/*": {
-      "target": "http://localhost:20677/api",
-      "pathRewrite": {
-        "^/api": ""
-      },
-      "changeOrigin": true,
-      "secure": false,
-      "logLevel": "debug"
+  "/authapi": {
+    "target": "https://localhost:7002",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/authapi": ""
+    }
+  },
+  "/instrumentapi": {
+    "target": "https://localhost:7001",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/instrumentapi": ""
     }
   }
-  
+}

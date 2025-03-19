@@ -1,21 +1,29 @@
 .card-title {
     text-transform: none;
+    max-height: 1rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap
 }
 
 .action-buttons { 
     margin-top: 1rem;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
 }
 
 .card-img-top {
     min-width: 100%;
-    min-height: 100%;
+    min-height: 45%;
 }
 
 .btn-outline-warning {
     text-transform: none;
+}
+
+.instrumentNametooltip {
+    background: red;
 }
 
 

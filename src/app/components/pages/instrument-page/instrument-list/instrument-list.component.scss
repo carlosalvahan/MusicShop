@@ -1,5 +1,5 @@
 .list-container {
-    max-height: calc(100vh - 8.9rem);
+    height: calc(100vh - 8.9rem);
     overflow-y: auto;
 }
 
@@ -17,4 +17,8 @@
 
 .add-icon {
     font-size: 4rem;;
+}
+
+.instrument-item-col {
+    height: calc(100vh - 15rem);
 }

@@ -7,6 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "proxy": "ng serve --proxy-config proxy.config.json",
     "serve:ssr:music-shop": "node dist/music-shop/server/server.mjs"
   },
   "private": true,

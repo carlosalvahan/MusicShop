@@ -1,9 +1,10 @@
 export const APIURL = {
-    registerApi: 'https://localhost:7002/api/auth/register',
-    getRolesApi: 'https://localhost:7002/api/auth/GetRoles',
-    loginApi: 'https://localhost:7002/api/auth/login',
-    getUsers: 'https://localhost:7002/api/auth/GetUsersAdmin',
-    deleteUsers: 'https://localhost:7002/api/auth/DeleteUser?id='
+    registerApi: '/authapi/api/auth/register',
+    getRolesApi: '/authapi/api/auth/GetRoles',
+    loginApi: '/authapi/api/auth/login',
+    getUsers: '/authapi/api/auth/GetUsersAdmin',
+    deleteUsers: '/authapi/api/auth/DeleteUser?id=',
+    getInstrumentList: '/instrumentapi/api/Instrument'
 }
 
 

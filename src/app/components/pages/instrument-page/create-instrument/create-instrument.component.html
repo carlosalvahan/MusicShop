@@ -1,0 +1,98 @@
+<div class="create-instrument-container d-flex flex-column ">
+    <div class="border border-top">
+        <div class="d-flex align-items-center justify-content-between ps-2 py-1">
+            <h3>Create Instrument</h3>
+            <button class="btn" (click)="closeModal.emit()"><i class="bi bi-x-lg"></i></button>
+        </div>
+    </div>
+    <div>
+        <app-wizard [wizardItems]="wizardItems" [activeIndex]="activeIndex"></app-wizard>
+    </div>
+    <div class="flex-fill overflow-y-auto w-100">
+        <div class="w-100" ngbNav #nav="ngbNav" [(activeId)]="activeIndex">
+            <div [ngbNavItem]="0">
+                <ng-template ngbNavContent>
+                    <div class="row mt-3 w-100">
+                        <div class="col-10">
+                            <div class="ps-3">
+                                <label for="instrumentName">Instrument Name</label>
+                                <input type="text" class="form-control" id="instrumentName"
+                                    placeholder="Instrument Name" formControlName="instrumentName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2 w-100">
+                        <div class="col-4">
+                            <div class="ps-3">
+                                <label for="price">Price</label>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">$</span>
+                                    <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label for="exampleSelect1" class="form-label my-0">Instrument Classification</label>
+                            <select class="form-select" id="exampleSelect1">
+                                <option>Guitar</option>
+                                <option>Keyboard</option>
+                                <option>Drums</option>
+                                <option>Cymbals</option>
+                                <option>Flute</option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <label for="instrumentName">Stocks Available</label>
+                            <input type="number" class="form-control w-50" id="stocksAvailable" placeholder="0"
+                                formControlName="stocksAvailable">
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+            <div [ngbNavItem]="1">
+                <ng-template ngbNavContent>
+                    <div class="row w-100">
+                        <div class="col-12">
+                            <div class="px-3">
+                                <label for="formFile" class="form-label mt-2">Upload image</label>
+                                <input class="form-control" type="file" id="formFile">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row w-100">
+                        <div class="col-12">
+                            <div class="px-3">
+                                <label for="exampleTextarea" class="form-label mt-2">Instrument Details</label>
+                                <textarea class="form-control details-text" id="exampleTextarea" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+            <div [ngbNavItem]="2">
+                <ng-template ngbNavContent>
+                    <div class="row w-100">
+                        <div class="col-12">
+                            <div class="m-4 d-flex align-items-center justify-content-center">
+                                <h1>This is still under construction.<br><br>Proceed with Saving</h1>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+        <div [ngbNavOutlet]="nav"></div>
+    </div>
+    <div class="border border-top d-flex justify-content-end ">
+        <div class="p-2">
+            @if(activeIndex !== 0) {
+            <button class="btn btn-outline-primary me-2" (click)="moveStep()">Previous</button>
+            }
+            @if(activeIndex !== wizardItems.length -1) {
+            <button class="btn btn-outline-primary" (click)="moveStep(1)">Next</button>
+            } @else {
+            <button class="btn-outline-warning btn">Save</button>
+            }
+        </div>
+    </div>
+</div>

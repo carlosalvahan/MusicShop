@@ -1,6 +1,6 @@
 <div class="row list-container">
     @if((loggedInUser$ | async)?.role === 'Admin') {
-        <div class="col-4 mt-2 ">
+        <div class="col-4 mt-2 " (click)="modalService.open(createInstrument, {size: 'lg'})">
             <div class="card h-100 w-100 d-flex align-items-center justify-content-center">
                 <div class="text-center">
                     <button class="btn btn-link"><i class="bi bi-plus-square-dotted add-icon"></i></button>
@@ -33,3 +33,6 @@
         </div>
      } -->
 </div>
+<ng-template #createInstrument let-modal>
+    <app-create-instrument (closeModal)="modal.close()"></app-create-instrument>
+</ng-template>

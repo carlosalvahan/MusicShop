@@ -18,6 +18,22 @@ export class InstrumentService {
      }
 
      getInstrumentList(): Observable<Instrument[]> {
-      return this.httpClient.get<Instrument[]>(APIURL.getInstrumentList);
+      return this.httpClient.get<Instrument[]>(APIURL.instrumentApi);
+     }
+
+     createInstrument(reqBody: Instrument): Observable<any> {
+      return this.httpClient.post(APIURL.instrumentApi, reqBody);
+     }
+
+     getInstrumentById(id: number) {
+      return this.httpClient.get(APIURL.instrumentById.replace('${0}', id.toString()));
+     }
+
+     updateInstrument(reqBody: Instrument) {
+      return this.httpClient.put(APIURL.instrumentApi, reqBody);
+     }
+
+     deleteInstrument(id: number) {
+      return this.httpClient.delete(APIURL.instrumentById.replace('${0}', id.toString()));
      }
 }

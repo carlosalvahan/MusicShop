@@ -14,4 +14,10 @@ export class FormMapper {
         });
         return mappedForm;
     }
+
+    mapRestToForm(fg: FormGroup, res: any) {
+        Object.keys(res).forEach(key => {
+            fg.get(key)?.setValue(res[key]);
+        })
+    }
 }

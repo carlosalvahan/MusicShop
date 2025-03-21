@@ -4,7 +4,8 @@ export const APIURL = {
     loginApi: '/authapi/api/auth/login',
     getUsers: '/authapi/api/auth/GetUsersAdmin',
     deleteUsers: '/authapi/api/auth/DeleteUser?id=',
-    getInstrumentList: '/instrumentapi/api/Instrument'
+    instrumentApi: '/instrumentapi/api/Instrument',
+    instrumentById: '/instrumentapi/api/Instrument/${0}',
 }
 
 

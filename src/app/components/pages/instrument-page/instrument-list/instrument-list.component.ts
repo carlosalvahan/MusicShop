@@ -24,6 +24,7 @@ export class InstrumentListComponent implements OnInit{
   modalService = inject(NgbModal);
   instrumentService = inject(InstrumentService);
   instrumentList: Instrument[] = [];
+  selectedInstrumentId: number = 0;
 
   ngOnInit(): void {
     this.loggedInUser$ = this.store.select('user');
@@ -44,5 +45,19 @@ export class InstrumentListComponent implements OnInit{
 
   closeModal(modal: any) {
     console.log(modal);
+  }
+
+  openEdit(id: number, template: any) {
+    this.selectedInstrumentId = id;
+    this.modalService.open(template, {size: 'lg'})
+  }
+
+  deleteItem(e: number) {
+    console.log('delete number', e);
+    this.instrumentService.deleteInstrument(e).subscribe({
+      next: (res) => {
+        console.log(res);
+      }
+    })
   }
 }

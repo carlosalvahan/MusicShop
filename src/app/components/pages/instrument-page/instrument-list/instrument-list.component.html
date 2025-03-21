@@ -11,7 +11,7 @@
     }
     @for(instrument of instrumentList; track instrument.id) {
     <div class="col-4 mt-2 instrument-item-col">
-        <app-instrument-item [instrument]="instrument"></app-instrument-item>
+        <app-instrument-item [instrument]="instrument" (deleteItem)="deleteItem($event)" (openEdit)="openEdit(instrument.id, createInstrument)"></app-instrument-item>
     </div>
     }
     <!-- Placeholder -->
@@ -34,5 +34,5 @@
      } -->
 </div>
 <ng-template #createInstrument let-modal>
-    <app-create-instrument (closeModal)="modal.close()"></app-create-instrument>
+    <app-create-instrument [editInstrument]="selectedInstrumentId" (closeModal)="modal.close()"></app-create-instrument>
 </ng-template>

@@ -1,11 +1,11 @@
-import { NgClass } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import { Component, input, OnInit } from '@angular/core';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-wizard',
   standalone: true,
-  imports: [NgClass, NgbTooltip],
+  imports: [NgClass, NgbTooltip, NgStyle],
   templateUrl: './wizard.component.html',
   styleUrl: './wizard.component.scss'
 })
@@ -13,6 +13,7 @@ export class WizardComponent implements OnInit{
   wizardItems = input<WizardItem[]>([]);
   colClass = '';
   activeIndex = input<number>(0);
+  containerHeight = input<string>('calc(100vh - 18rem)')
   readonly activeIconClass = ' text-warning';
   readonly inactiveIconClass = ' text-primary';
   readonly disabledIconClass = ' opacity-50';

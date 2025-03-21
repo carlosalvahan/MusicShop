@@ -1,30 +1,34 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Instrument } from '../instrument-model';
-import { CurrencyPipe } from '@angular/common';
+import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { Store } from '@ngrx/store';
+import { ModalContent } from '../../../shared/modal/modal.component';
+import { ModalService } from '../../../shared/modal/modal.service';
 
 @Component({
   selector: 'app-instrument-item',
   standalone: true,
-  imports: [CurrencyPipe, NgbTooltipModule],
+  imports: [CurrencyPipe, NgbTooltipModule, AsyncPipe],
   templateUrl: './instrument-item.component.html',
   styleUrl: './instrument-item.component.scss'
 })
 export class InstrumentItemComponent {
   imgSrc = `https://picsum.photos/id/${Math.floor(Math.random() * 100)}/200/150`
   router = inject(Router);
+  store = inject(Store);
   activeRoute = inject(ActivatedRoute);
-  instrument = input<Instrument>(
-    {
-      id: 0,
-      type: '',
-      stocks: 0,
-      details: '',
-      name: '',
-      price: 0
-    }
-  );
+  instrument = input<Instrument>(new Instrument({}));
+  modalService = inject(ModalService);
+
+  openEdit = output();
+  deleteItem = output<number>();
+
+  user$ = this.store.select('user');
+
+  modalContent: ModalContent = new ModalContent();
+  
   openDetails(id: number) {
     console.log(id);
     // this.router.navigate(['1'], {relativeTo: this.activeRoute});
@@ -33,5 +37,23 @@ export class InstrumentItemComponent {
   addtoCart(e:Event) {
     e.stopPropagation();
     console.log('add to cart');
+  }
+
+  editInstrument() {
+    this.openEdit.emit();
+  }
+
+  deleteInstrument() {
+    this.modalContent = {
+      ...this.modalContent,
+      message: 'Are you sure you want to continue?',
+      title: 'Delete Instrument'
+    }
+    this.modalService.open(this.modalContent, { size: 'md' }).result.then(res => {
+      if (res) {
+        console.log('delete please', this.instrument().id)
+        this.deleteItem.emit(this.instrument().id);
+      }
+    }, (e) => {});
   }
 }

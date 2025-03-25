@@ -25,8 +25,8 @@ export class InstrumentService {
       return this.httpClient.post(APIURL.instrumentApi, reqBody);
      }
 
-     getInstrumentById(id: number) {
-      return this.httpClient.get(APIURL.instrumentById.replace('${0}', id.toString()));
+     getInstrumentById(id: number): Observable<Instrument> {
+      return this.httpClient.get<Instrument>(APIURL.instrumentById.replace('${0}', id.toString()));
      }
 
      updateInstrument(reqBody: Instrument) {

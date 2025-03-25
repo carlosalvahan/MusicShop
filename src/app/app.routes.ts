@@ -7,13 +7,19 @@ import { UsersPageComponent } from './components/pages/users-page/users-page.com
 import { adminOnlyRoute } from './app-guards';
 import { AboutUsPageComponent } from './components/pages/about-us-page/about-us-page.component';
 import { ContactUsPageComponent } from './components/pages/contact-us-page/contact-us-page.component';
+import { InstrumentResolver } from './components/pages/instrument-page/instrument-resolver';
 
 export const routes: Routes = [
     {path: '', redirectTo: '/instruments', pathMatch: 'full'},
     {path: 'instruments', component: InstrumentPageComponent},
     {path: 'about', component: AboutUsPageComponent},
     {path: 'contact', component: ContactUsPageComponent},
-    {path: 'instruments/:id', loadComponent: () => import('./components/pages/instrument-page/instrument-detail/instrument-detail.component').then(x => x.InstrumentDetailComponent)},
+    {path: 'instruments/:id',
+        resolve: {
+            instrument: InstrumentResolver
+        },
+        loadComponent: () => import('./components/pages/instrument-page/instrument-detail/instrument-detail.component').then(x => x.InstrumentDetailComponent)
+    },
     {path: 'orders', component: OrdersPageComponent, 
         canActivate:[adminOnlyRoute]
     },

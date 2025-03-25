@@ -31,7 +31,6 @@ export class UsersPageComponent implements OnInit {
   toast = inject(ToastService)
   userService = inject(UserListService);
   modalService = inject(ModalService);
-  ngbModalService = inject(NgbModal);
   userListState$ = new Observable<userListState>;
   modalContent: ModalContent = new ModalContent();
 

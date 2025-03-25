@@ -8,21 +8,26 @@
         <div class="col-4 border border-primary">
             <div class="row d-flex flex-column h-100 py-3">
                 <div class="col-12">
-                    <h1>YAMAHA GUITAR 1 XLSS MODEL P1923210SADA</h1>
+                    <h1>{{ instrument.name }}</h1>
                 </div>
                 <div class="col-12">
-                    <h3>$ 15,000</h3>
+                    <h3>{{ instrument.price | currency }}</h3>
                 </div>
                 <div class="col-12">
-                    Quantity: 
-                    <select name="" id="">
-                        <option value="">1</option>
-                        <option value="">2</option>
-                    </select>
+                    <div class="row">
+                        <div class="col-12">
+                            Quantity: 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
+                            <app-counter-input [maxValue]="instrument.stocks" [(ngModel)]="quantity"></app-counter-input>
+                        </div>
+                    </div>
                 </div>
                 <div class="flex-fill position-relative">
-                    <div class="detail-buttons">
-                        <button class="btn btn-outline-warning me-2">Add to cart</button>
+                    <div class="detail-buttons mt-2">
+                        <button class="btn btn-outline-warning me-2" (click)="addToCart()">{{ itemIsInCart ? 'Update Cart' : 'Add to Cart' }} <i class="ms-2" [ngClass]="itemIsInCart ? 'bi bi-cart-check' : 'bi bi-cart-plus'"></i></button>
                     <button class="btn btn-outline-primary">Buy Now</button>
                     </div>
                 </div>
@@ -32,9 +37,7 @@
     <div class="row description-row my-3">
         <div class="col-12 border border-dark p-2">
             <div class="p-3">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsam dolorum unde suscipit sint similique voluptatibus, ea maiores praesentium neque fuga quam, magni cumque iure. Laboriosam perspiciatis ullam quas ea reprehenderit.
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio amet, nemo ipsam voluptates, eius labore consectetur excepturi asperiores, blanditiis officiis corrupti animi. Perspiciatis exercitationem amet ut obcaecati pariatur cum. Cumque.
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sapiente aliquid quas, ab neque porro pariatur magni laudantium repudiandae rem officia ipsa quibusdam iure voluptas placeat dicta facilis quasi sed sint?
+                {{ instrument.detail }}
             </div>
         </div>
     </div>

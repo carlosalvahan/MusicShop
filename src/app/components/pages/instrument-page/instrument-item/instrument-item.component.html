@@ -10,8 +10,8 @@
                 @if((user$ | async).role !== 'Admin') {
                     <button type="button" class="btn btn-outline-warning py-1 px-2" (click)="addtoCart($event)">Add to Cart<i class="ms-2 bi bi-cart-plus"></i></button>
                 } @else {
-                    <button class="btn btn-outline-warning me-2 p-2" (click)="editInstrument()">Edit<i class="ms-2 bi bi-pencil-fill"></i></button>
-                    <button class="btn btn-outline-danger p-2" (click)="deleteInstrument()">Delete<i class="ms-2 bi bi-trash-fill"></i></button>
+                    <button class="btn btn-outline-warning me-2 p-2" (click)="editInstrument($event)">Edit<i class="ms-2 bi bi-pencil-fill"></i></button>
+                    <button class="btn btn-outline-danger p-2" (click)="deleteInstrument($event)">Delete<i class="ms-2 bi bi-trash-fill"></i></button>
                 }
             </div>
         </div>

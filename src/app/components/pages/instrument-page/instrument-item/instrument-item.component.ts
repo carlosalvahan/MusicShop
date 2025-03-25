@@ -6,11 +6,13 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { ModalContent } from '../../../shared/modal/modal.component';
 import { ModalService } from '../../../shared/modal/modal.service';
+import { InstrumentService } from '../services/instrument-service';
 
 @Component({
   selector: 'app-instrument-item',
   standalone: true,
   imports: [CurrencyPipe, NgbTooltipModule, AsyncPipe],
+  providers: [InstrumentService],
   templateUrl: './instrument-item.component.html',
   styleUrl: './instrument-item.component.scss'
 })
@@ -31,7 +33,7 @@ export class InstrumentItemComponent {
   
   openDetails(id: number) {
     console.log(id);
-    // this.router.navigate(['1'], {relativeTo: this.activeRoute});
+    this.router.navigate([id], {relativeTo: this.activeRoute});
   }
 
   addtoCart(e:Event) {
@@ -39,11 +41,13 @@ export class InstrumentItemComponent {
     console.log('add to cart');
   }
 
-  editInstrument() {
+  editInstrument(e: Event) {
+    e.stopPropagation();
     this.openEdit.emit();
   }
 
-  deleteInstrument() {
+  deleteInstrument(e: Event) {
+    e.stopPropagation();
     this.modalContent = {
       ...this.modalContent,
       message: 'Are you sure you want to continue?',

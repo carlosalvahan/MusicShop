@@ -9,16 +9,20 @@
             <ul class="navbar-nav me-auto">
                 @for (navItem of navItems; track navItem.label) {
                 <li class="nav-item">
-                    <a class="nav-link" [routerLink]="navItem.path" routerLinkActive="text-warning fw-bolder">{{navItem.label}}
+                    <a class="nav-link" [routerLink]="navItem.path"
+                        routerLinkActive="text-warning fw-bolder">{{navItem.label}}
                     </a>
                 </li>
                 }
             </ul>
             @if((loggedInUser$ | async)?.firstName; as fName) {
             <div class="row">
-                <div class="col">
+                <div class="col d-flex align-items-center">
+                    <button class="btn btn-outline-warning py-1 px-2" ngbTooltip="View Cart" (click)="open(content)"><i
+                            class="bi bi-cart"></i></button>
                     <div ngbDropdown class="d-inline-block">
-                        <button type="button" class="btn btn-link text-decoration-none text-white" id="dropdownBasic1" ngbDropdownToggle>
+                        <button type="button" class="btn btn-link text-decoration-none text-white" id="dropdownBasic1"
+                            ngbDropdownToggle>
                             Welcome {{ (loggedInUser$ | async)?.firstName }}
                         </button>
                         <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
@@ -40,3 +44,23 @@
         </div>
     </div>
 </nav>
+
+
+<ng-template #content let-offcanvas>
+    <div class="d-flex flex-column h-100">
+        <div class="offcanvas-header">
+            <h4 class="offcanvas-title" id="offcanvas-basic-title">Cart Items</h4>
+            <button type="button" class="btn-close" aria-label="Close"
+                (click)="offcanvas.dismiss('Cross click')"></button>
+        </div>
+        <div class="offcanvas-body flex-fill">
+            <div class="mb-3">
+                <app-cart-detail></app-cart-detail>
+            </div>
+        </div>
+        <div class="text-center my-2">
+            <button type="button" class="btn btn-outline-secondary"
+                (click)="offcanvas.close('Save click')">Save</button>
+        </div>
+    </div>
+</ng-template>

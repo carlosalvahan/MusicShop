@@ -1,0 +1,11 @@
+<div class="d-flex justify-content-center align-items-center">
+    <div>
+        <i class="bi bi-dash-circle counter-icons me-1 text-danger" (click)="decrement()"></i>
+    </div>
+    <div class="flex-fill">
+        <input type="text" [disabled]="disableInput" [(ngModel)]="counterValue" class="form-control counter-input px-1 py-2">
+    </div>
+    <div>
+        <i class="bi bi-plus-circle counter-icons ms-1" (click)="increment()"></i>
+    </div>
+</div>

@@ -1,18 +1,19 @@
-import { afterNextRender, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { afterNextRender, Component, inject, OnDestroy, OnInit, signal, TemplateRef, WritableSignal } from '@angular/core';
 import { RouterLinkActive, RouterLink, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { UserModel } from '../../store/user/user-model';
 import { CommonModule } from '@angular/common';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbOffcanvas, NgbTooltip, OffcanvasDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { StorageService } from '../shared/storage/storage-service';
 import { UserActions } from '../../store/user/user-actions';
 import { sessionKeys } from '../../app.constants';
+import { CartDetailComponent } from '../pages/cart-page/cart-detail/cart-detail.component';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, CommonModule, NgbDropdownModule],
+  imports: [RouterLink, RouterLinkActive, CommonModule, NgbDropdownModule, NgbTooltip, CartDetailComponent],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
@@ -77,4 +78,30 @@ export class NavbarComponent implements OnInit, OnDestroy {
   navigateTo(path: string) {
     this.router.navigate([path]);
   }
+
+
+  private offcanvasService = inject(NgbOffcanvas);
+	closeResult: WritableSignal<string> = signal('');
+
+	open(content: TemplateRef<any>) {
+		this.offcanvasService.open(content, { ariaLabelledBy: 'offcanvas-basic-title' }).result.then(
+			(result) => {
+				this.closeResult.set(`Closed with: ${result}`);
+			},
+			(reason) => {
+				this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
+			},
+		);
+	}
+
+	private getDismissReason(reason: any): string {
+		switch (reason) {
+			case OffcanvasDismissReasons.ESC:
+				return 'by pressing ESC';
+			case OffcanvasDismissReasons.BACKDROP_CLICK:
+				return 'by clicking on the backdrop';
+			default:
+				return `with: ${reason}`;
+		}
+	}
 }

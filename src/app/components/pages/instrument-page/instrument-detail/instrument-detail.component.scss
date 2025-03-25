@@ -1,8 +1,12 @@
 .product-image {
-    height: calc(100vh - 15rem);
+    height: 100%;
 }
 
 .detail-buttons{
-    position: absolute;
-    bottom: 0.25rem;
+    // position: absolute;
+    // bottom: 0.25rem;
+}
+
+.stocks-input {
+    width: 40%;
 }

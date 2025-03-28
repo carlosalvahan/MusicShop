@@ -32,7 +32,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   readonly loggedInUserTabs = [
     { label: 'Instruments', path: '/instruments' },
-    { label: 'Orders', path: '/users' },
+    { label: 'Orders', path: '/orders' },
   ];
 
   navItems = this.guestTabs;

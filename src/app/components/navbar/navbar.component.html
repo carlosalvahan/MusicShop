@@ -48,19 +48,19 @@
 
 <ng-template #content let-offcanvas>
     <div class="d-flex flex-column h-100">
-        <div class="offcanvas-header">
+        <div class="offcanvas-header border-bottom border-secondary">
             <h4 class="offcanvas-title" id="offcanvas-basic-title">Cart Items</h4>
             <button type="button" class="btn-close" aria-label="Close"
                 (click)="offcanvas.dismiss('Cross click')"></button>
         </div>
-        <div class="offcanvas-body flex-fill">
+        <div class="offcanvas-body flex-fill border-bottom border-secondary">
             <div class="mb-3">
                 <app-cart-detail></app-cart-detail>
             </div>
         </div>
-        <div class="text-center my-2">
-            <button type="button" class="btn btn-outline-secondary"
-                (click)="offcanvas.close('Save click')">Save</button>
+        <div class="text-end m-2">
+            <button type="button" class="btn btn-outline-warning"
+                (click)="offcanvas.close('Save click'); navigateTo('/checkout')">Checkout <i class="ms-2 bi bi-cart-check"></i></button>
         </div>
     </div>
 </ng-template>

@@ -15,7 +15,6 @@ export class SideFilterComponent implements OnInit{
   filterItems = input<FilterGroup[] | []>([]);
   
   ngOnInit(): void {
-    console.log(this.filterItems());
   }
 }
 

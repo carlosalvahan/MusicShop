@@ -1,10 +1,11 @@
 import { NgClass } from '@angular/common';
-import { Component, TemplateRef } from '@angular/core';
+import { Component, OnDestroy, TemplateRef } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { RegisterService } from './services/register.service';
 import { ToastService } from '../../shared/toast/toast-service';
 import { Router } from '@angular/router';
 import { FormMapper } from '../../shared/form-mapper/form-mapper';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register-page',
@@ -14,7 +15,8 @@ import { FormMapper } from '../../shared/form-mapper/form-mapper';
   templateUrl: './register-page.component.html',
   styleUrl: './register-page.component.scss'
 })
-export class RegisterPageComponent {
+export class RegisterPageComponent implements OnDestroy{
+  subList: Subscription[] = [];
   constructor(private regService: RegisterService, 
     private toastService: ToastService, 
     private router: Router,
@@ -39,21 +41,23 @@ export class RegisterPageComponent {
     this.showLoader = true;
     const reqBody = this.formMapper.mapForm(this.registrationForm);
 
-    this.regService.userRegister(reqBody).subscribe({
-      next: (res) => {
-        setTimeout(() => {
-          this.showToast(res.message, 'success');
-          this.showLoader = false;
-          this.router.navigateByUrl('/login')
-        }, 2000);
-      },
-      error: (e) => {
-        setTimeout(() => {
-          this.showToast(e.error.message, 'danger');
-          this.showLoader = false
-        }, 2000);
-      }
-    });
+    this.subList.push(
+      this.regService.userRegister(reqBody).subscribe({
+        next: (res) => {
+          setTimeout(() => {
+            this.showToast(res.message, 'success');
+            this.showLoader = false;
+            this.router.navigateByUrl('/login')
+          }, 2000);
+        },
+        error: (e) => {
+          setTimeout(() => {
+            this.showToast(e.error.message, 'danger');
+            this.showLoader = false
+          }, 2000);
+        }
+      })
+    );
   }
 
   formCancel() {
@@ -62,5 +66,9 @@ export class RegisterPageComponent {
 
   showToast(message: string, type: string = 'secondary') {
     this.toastService.show({ message, classname: '', delay: 2000}, type);
+  }
+
+  ngOnDestroy(): void {
+    this.subList.forEach(sub => { sub.unsubscribe() })
   }
 }

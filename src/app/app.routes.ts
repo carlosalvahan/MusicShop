@@ -20,8 +20,9 @@ export const routes: Routes = [
         },
         loadComponent: () => import('./components/pages/instrument-page/instrument-detail/instrument-detail.component').then(x => x.InstrumentDetailComponent)
     },
-    {path: 'orders', component: OrdersPageComponent, 
-        canActivate:[adminOnlyRoute]
+    {path: 'orders', component: OrdersPageComponent },
+    {path: 'checkout', 
+        loadComponent: () => import('./components/pages/cart-page/cart-page.component').then(x => x.CartPageComponent)
     },
     {path: 'register', component: RegisterPageComponent},
     {path: 'login', component: LoginPageComponent},

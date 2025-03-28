@@ -1,4 +1,4 @@
-import { Component, inject, input, output } from '@angular/core';
+import { Component, inject, input, OnDestroy, OnInit, output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Instrument } from '../instrument-model';
 import { AsyncPipe, CurrencyPipe } from '@angular/common';
@@ -7,6 +7,9 @@ import { Store } from '@ngrx/store';
 import { ModalContent } from '../../../shared/modal/modal.component';
 import { ModalService } from '../../../shared/modal/modal.service';
 import { InstrumentService } from '../services/instrument-service';
+import { CartItem } from '../../../../store/cart/cart-model';
+import { CartListAction } from '../../../../store/cart/cart-actions';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-instrument-item',
@@ -16,7 +19,7 @@ import { InstrumentService } from '../services/instrument-service';
   templateUrl: './instrument-item.component.html',
   styleUrl: './instrument-item.component.scss'
 })
-export class InstrumentItemComponent {
+export class InstrumentItemComponent implements OnInit, OnDestroy {
   imgSrc = `https://picsum.photos/id/${Math.floor(Math.random() * 100)}/200/150`
   router = inject(Router);
   store = inject(Store);
@@ -30,16 +33,28 @@ export class InstrumentItemComponent {
   user$ = this.store.select('user');
 
   modalContent: ModalContent = new ModalContent();
-  
-  openDetails(id: number) {
-    console.log(id);
-    this.router.navigate([id], {relativeTo: this.activeRoute});
+  cartItems: CartItem[] = [];
+  subList: Subscription[] = [];
+  itemIsInCart: boolean = false;
+
+  ngOnInit(): void {
+    this.subList.push(
+      this.store.select('cartList').subscribe(res => {
+        this.cartItems = res.cartList;
+        const itemInCart = this.cartItems.find(item => item.id === this.instrument().id);
+        this.itemIsInCart = Boolean(itemInCart);
+      })
+    );
   }
 
-  addtoCart(e:Event) {
-    e.stopPropagation();
-    console.log('add to cart');
+  ngOnDestroy(): void {
+    this.subList.forEach(sub => { sub.unsubscribe() });
   }
+
+  openDetails(id: number) {
+    this.router.navigate([id], { relativeTo: this.activeRoute });
+  }
+
 
   editInstrument(e: Event) {
     e.stopPropagation();
@@ -58,6 +73,25 @@ export class InstrumentItemComponent {
         console.log('delete please', this.instrument().id)
         this.deleteItem.emit(this.instrument().id);
       }
-    }, (e) => {});
+    }, (e) => { });
+  }
+
+  addToCart(e: Event) {
+    e.stopPropagation();
+    const { id, name, price, stocks } = this.instrument();
+    const itemAdd: CartItem = {
+      id,
+      name,
+      price,
+      stocks,
+      quantity: 1,
+    }
+    if (this.cartItems.length < 1) {
+      this.store.dispatch(CartListAction.addCartItem({ cartItem: itemAdd }));
+    } else if (this.itemIsInCart) {
+      this.store.dispatch(CartListAction.updateCartItem({ cartItem: itemAdd }));
+    } else {
+      this.store.dispatch(CartListAction.addCartItem({ cartItem: itemAdd }));
+    }
   }
 }

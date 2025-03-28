@@ -1,6 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { InstrumentItemComponent } from '../instrument-item/instrument-item.component';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { UserModel } from '../../../../store/user/user-model';
 import { Store } from '@ngrx/store';
 import { AsyncPipe } from '@angular/common';
@@ -17,26 +17,32 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './instrument-list.component.html',
   styleUrl: './instrument-list.component.scss'
 })
-export class InstrumentListComponent implements OnInit{
+export class InstrumentListComponent implements OnInit, OnDestroy{
   loggedInUser$!: Observable<UserModel>;
 
   store = inject(Store);
   modalService = inject(NgbModal);
   instrumentService = inject(InstrumentService);
   instrumentList: Instrument[] = [];
+  subList: Subscription[] = [];
   selectedInstrumentId: number = 0;
 
   ngOnInit(): void {
     this.loggedInUser$ = this.store.select('user');
-    this.instrumentService.getInstrumentList().subscribe({
-      next: res => {
-        this.instrumentList = [...res];
-        console.log(this.instrumentList);
-      },
-      error: e => {
-        console.log(e);
-      }
-    });
+    this.subList.push(
+      this.instrumentService.getInstrumentList().subscribe({
+        next: res => {
+          this.instrumentList = [...res];
+        },
+        error: e => {
+          console.log(e);
+        }
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subList.forEach(sub => { sub.unsubscribe() })
   }
 
   openInstrumentModal(template: any) {
@@ -54,10 +60,12 @@ export class InstrumentListComponent implements OnInit{
 
   deleteItem(e: number) {
     console.log('delete number', e);
-    this.instrumentService.deleteInstrument(e).subscribe({
-      next: (res) => {
-        console.log(res);
-      }
-    })
+    this.subList.push(
+      this.instrumentService.deleteInstrument(e).subscribe({
+        next: (res) => {
+          console.log(res);
+        }
+      })
+    );
   }
 }

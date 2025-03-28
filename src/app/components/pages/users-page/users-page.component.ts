@@ -1,11 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ACGridComponent, ButtonOutput } from '../../shared/grid/grid.component';
 import { ColumnModelMapper } from '../../shared/grid/column-model-mapper/column-model-mapper.service';
 import { UserModel } from '../../../store/user/user-model'
 import type { ColDef } from 'ag-grid-community';
 import { Store } from '@ngrx/store';
 import { UserListActions } from '../../../store/user-list/user-list-actions';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { LoaderComponent } from '../../shared/loader/loader.component';
 import { userListState } from '../../../store/user-list/user-list-model';
@@ -23,9 +23,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   providers: [ColumnModelMapper, UserListService, NgbModal],
   styleUrl: './users-page.component.scss'
 })
-export class UsersPageComponent implements OnInit {
-  userData: any[] = [];
-  colData: ColDef[] = [];
+export class UsersPageComponent implements OnInit, OnDestroy {
   mapper = inject(ColumnModelMapper);
   store = inject(Store);
   toast = inject(ToastService)
@@ -33,13 +31,22 @@ export class UsersPageComponent implements OnInit {
   modalService = inject(ModalService);
   userListState$ = new Observable<userListState>;
   modalContent: ModalContent = new ModalContent();
+  userData: any[] = [];
+  colData: ColDef[] = [];
+  subList: Subscription[] = [];
 
   ngOnInit(): void {
     this.colData = this.mapper.mapModelToColumn(new UserModel(), ['id']);
     this.userListState$ = this.store.select('userList');
-    this.userService.getAllUsers().subscribe(res => {
-      this.store.dispatch(UserListActions.getUserList({ users: res }));
-    });
+    this.subList.push(
+      this.userService.getAllUsers().subscribe(res => {
+        this.store.dispatch(UserListActions.getUserList({ users: res }));
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subList.forEach(sub => { sub.unsubscribe() })
   }
 
   gridButtonClicked(e: ButtonOutput) {
@@ -65,21 +72,23 @@ export class UsersPageComponent implements OnInit {
 
   deleteUser(data: any) {
     this.store.dispatch(UserListActions.userLoading({ loading: true }));
-    this.userService.deleteUser(data.id).subscribe({
-      next: (res: any) => {
-        if (res?.isSuccess) {
-          this.toast.show({ message: res?.message }, 'success');
-          this.store.dispatch(UserListActions.deleteUser({ id: data?.id }));
-        } else {
-          this.toast.show({ message: 'Something went wrong' }, 'danger');
+    this.subList.push(
+      this.userService.deleteUser(data.id).subscribe({
+        next: (res: any) => {
+          if (res?.isSuccess) {
+            this.toast.show({ message: res?.message }, 'success');
+            this.store.dispatch(UserListActions.deleteUser({ id: data?.id }));
+          } else {
+            this.toast.show({ message: 'Something went wrong' }, 'danger');
+            this.store.dispatch(UserListActions.userLoading({ loading: false }));
+          }
+        },
+        error: (e) => {
+          this.toast.show({ message: e?.error?.message }, 'danger');
           this.store.dispatch(UserListActions.userLoading({ loading: false }));
         }
-      },
-      error: (e) => {
-        this.toast.show({ message: e?.error?.message }, 'danger');
-        this.store.dispatch(UserListActions.userLoading({ loading: false }));
-      }
-    });
+      })
+    );
   }
 
 }

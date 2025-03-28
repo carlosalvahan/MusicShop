@@ -1,10 +1,11 @@
-import { Component, inject, input, OnInit, output } from '@angular/core';
+import { Component, inject, input, OnDestroy, OnInit, output } from '@angular/core';
 import { WizardComponent, WizardItem } from '../../../shared/wizard/wizard.component';
 import { NgbNav, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormMapper } from '../../../shared/form-mapper/form-mapper';
 import { InstrumentService } from '../services/instrument-service';
 import { Instrument } from '../instrument-model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-create-instrument',
@@ -14,7 +15,7 @@ import { Instrument } from '../instrument-model';
   templateUrl: './create-instrument.component.html',
   styleUrl: './create-instrument.component.scss'
 })
-export class CreateInstrumentComponent implements OnInit{
+export class CreateInstrumentComponent implements OnInit, OnDestroy{
   mapper = inject(FormMapper);
   instrumentService = inject(InstrumentService);
   wizardItems: WizardItem[] = [
@@ -34,18 +35,25 @@ export class CreateInstrumentComponent implements OnInit{
   activeIndex:number = 0;
   closeModal = output<void>();
   editInstrument = input<number>(0);
+  subList: Subscription[] = [];
 
   ngOnInit(): void {
     if(this.editInstrument()) {
-      this.instrumentService.getInstrumentById(this.editInstrument()).subscribe({
-        next: (res) => {
-          this.mapper.mapRestToForm(this.instrumentForm, res);
-        },
-        error: (e) => {
-          console.log(e);
-        }
-      });
+      this.subList.push(
+        this.instrumentService.getInstrumentById(this.editInstrument()).subscribe({
+          next: (res) => {
+            this.mapper.mapRestToForm(this.instrumentForm, res);
+          },
+          error: (e) => {
+            console.log(e);
+          }
+        })
+      );
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subList.forEach(sub => { sub.unsubscribe() });
   }
 
   moveStep(next: number = -1) {
@@ -56,21 +64,25 @@ export class CreateInstrumentComponent implements OnInit{
     const mappedForm = this.mapper.mapForm(this.instrumentForm);
     const reqBody: Instrument = new Instrument(mappedForm);
     if(!this.editInstrument()) {
-      this.instrumentService.createInstrument(reqBody).subscribe({
-        next: (res) => {
-          console.log(res)
-        },
-        error: (e) => {
-          console.log(e)
-        }
-      });
+      this.subList.push(
+        this.instrumentService.createInstrument(reqBody).subscribe({
+          next: (res) => {
+            console.log(res)
+          },
+          error: (e) => {
+            console.log(e)
+          }
+        })
+      );
     } else {
       reqBody.id = this.editInstrument();
-      this.instrumentService.updateInstrument(reqBody).subscribe({
-        next: (res) => {
-          console.log(res);
-        }
-      })
+      this.subList.push(
+        this.instrumentService.updateInstrument(reqBody).subscribe({
+          next: (res) => {
+            console.log(res);
+          }
+        })
+      );
     }
     
   }

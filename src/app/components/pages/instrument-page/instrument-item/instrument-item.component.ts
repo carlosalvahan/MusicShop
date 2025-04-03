@@ -10,12 +10,13 @@ import { InstrumentService } from '../services/instrument-service';
 import { CartItem } from '../../../../store/cart/cart-model';
 import { CartListAction } from '../../../../store/cart/cart-actions';
 import { Subscription } from 'rxjs';
+import { CartService } from '../../cart-page/services/cart-service';
 
 @Component({
   selector: 'app-instrument-item',
   standalone: true,
   imports: [CurrencyPipe, NgbTooltipModule, AsyncPipe],
-  providers: [InstrumentService],
+  providers: [InstrumentService, CartService],
   templateUrl: './instrument-item.component.html',
   styleUrl: './instrument-item.component.scss'
 })
@@ -24,6 +25,7 @@ export class InstrumentItemComponent implements OnInit, OnDestroy {
   router = inject(Router);
   store = inject(Store);
   activeRoute = inject(ActivatedRoute);
+  cartService = inject(CartService);
   instrument = input<Instrument>(new Instrument({}));
   modalService = inject(ModalService);
 
@@ -36,12 +38,18 @@ export class InstrumentItemComponent implements OnInit, OnDestroy {
   cartItems: CartItem[] = [];
   subList: Subscription[] = [];
   itemIsInCart: boolean = false;
+  cartId: number = 0;
+  cartItemId: number = 0;
 
   ngOnInit(): void {
     this.subList.push(
       this.store.select('cartList').subscribe(res => {
+        this.cartId = res.cartId;
         this.cartItems = res.cartList;
-        const itemInCart = this.cartItems.find(item => item.id === this.instrument().id);
+        const itemInCart = this.cartItems.find(item => item.instrumentId === this.instrument().id);
+        if(itemInCart) {
+          this.cartItemId = itemInCart.id;
+        }
         this.itemIsInCart = Boolean(itemInCart);
       })
     );
@@ -80,18 +88,36 @@ export class InstrumentItemComponent implements OnInit, OnDestroy {
     e.stopPropagation();
     const { id, name, price, stocks } = this.instrument();
     const itemAdd: CartItem = {
-      id,
+      id: this.cartItemId,
       name,
       price,
       stocks,
       quantity: 1,
+      instrumentId: id
     }
-    if (this.cartItems.length < 1) {
-      this.store.dispatch(CartListAction.addCartItem({ cartItem: itemAdd }));
-    } else if (this.itemIsInCart) {
-      this.store.dispatch(CartListAction.updateCartItem({ cartItem: itemAdd }));
+    if(this.cartItems.length < 1) {
+      this.addCartItem(itemAdd);
+    } else if(this.itemIsInCart) {
+      this.store.dispatch(CartListAction.updateCartItem({cartItem: itemAdd}));
+      this.addCartItem(itemAdd, true);
     } else {
-      this.store.dispatch(CartListAction.addCartItem({ cartItem: itemAdd }));
+      this.addCartItem(itemAdd);
     }
+  }
+
+  addCartItem(itemAdd: any, update: boolean = false) {
+    const reqBody = {
+      instrumentId: itemAdd.instrumentId,
+      quantity: itemAdd.quantity,
+      cartId: this.cartId
+    };
+    this.cartService.updateCart(reqBody).subscribe({
+      next: (res) => {
+        if(!update) {
+          itemAdd.id = res;
+          this.store.dispatch(CartListAction.addCartItem({cartItem: itemAdd}));
+        }
+      }
+    });
   }
 }

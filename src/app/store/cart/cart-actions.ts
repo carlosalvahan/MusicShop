@@ -5,7 +5,7 @@ export const CartListAction = createActionGroup({
     source: 'UserList', 
     events: {
         'cartListLoading': props<{loading: boolean}>(),
-        'getCartList': props<{cartItems: CartItem[]}>(),
+        'getCartList': props<{cartId: number, cartItems: CartItem[]}>(),
         'addCartItem': props<{cartItem: CartItem}>(),
         'updateCartItem': props<{cartItem: CartItem}>(),
         'deleteCartItem': props<{id: number }>(),

@@ -8,17 +8,20 @@ import { CartItem } from '../../../../store/cart/cart-model';
 import { Store } from '@ngrx/store';
 import { CartListAction } from '../../../../store/cart/cart-actions';
 import { Subscription } from 'rxjs';
+import { CartService } from '../../cart-page/services/cart-service';
 
 @Component({
   selector: 'app-instrument-detail',
   standalone: true,
   imports: [CurrencyPipe, CounterInputComponent, FormsModule, NgClass],
+  providers: [ CartService],
   templateUrl: './instrument-detail.component.html',
   styleUrl: './instrument-detail.component.scss'
 })
 export class InstrumentDetailComponent implements OnInit, OnDestroy {
   activatedRoute = inject(ActivatedRoute);
   store = inject(Store);
+  cartService = inject(CartService);
 
   instrument: Instrument = new Instrument({});
   quantity: number = 1;
@@ -26,6 +29,8 @@ export class InstrumentDetailComponent implements OnInit, OnDestroy {
   cartItems: CartItem[] = [];
   itemIsInCart: boolean = false;
   subList: Subscription[] = [];
+  cartId: number = 0;
+  cartItemId: number = 0;
 
   ngOnInit(): void {
     this.subList.push(
@@ -36,10 +41,13 @@ export class InstrumentDetailComponent implements OnInit, OnDestroy {
       }),
       this.store.select('cartList').subscribe(res => {
         this.cartItems = res.cartList;
-        const itemInCart = this.cartItems.find(item => item.id === this.instrument.id);
+        
+        this.cartId = res.cartId;
+        const itemInCart = this.cartItems.find(item => item.instrumentId === this.instrument.id);
         if(itemInCart) {
           this.itemIsInCart = true;
           this.quantity = itemInCart.quantity;
+          this.cartItemId = itemInCart.id
         } else {
           this.itemIsInCart = false;
           this.quantity = 1;
@@ -55,18 +63,38 @@ export class InstrumentDetailComponent implements OnInit, OnDestroy {
   addToCart() {
     const {id, name, price, stocks} = this.instrument;
     const itemAdd: CartItem = {
-      id,
+      id: this.cartItemId,
       name,
       price,
       stocks,
       quantity: this.quantity,
+      instrumentId: id
     }
     if(this.cartItems.length < 1) {
-      this.store.dispatch(CartListAction.addCartItem({cartItem: itemAdd}));
+      this.addCartItem(itemAdd);
     } else if(this.itemIsInCart) {
+      console.log(itemAdd);
+      
       this.store.dispatch(CartListAction.updateCartItem({cartItem: itemAdd}));
+      this.addCartItem(itemAdd, true);
     } else {
-      this.store.dispatch(CartListAction.addCartItem({cartItem: itemAdd}));
+      this.addCartItem(itemAdd);
     }
+  }
+
+  addCartItem(itemAdd: any, update: boolean = false) {
+    const reqBody = {
+      instrumentId: itemAdd.instrumentId,
+      quantity: itemAdd.quantity,
+      cartId: this.cartId
+    };
+    this.cartService.updateCart(reqBody).subscribe({
+      next: (res) => {
+        if(!update) {
+          itemAdd.id = res;
+          this.store.dispatch(CartListAction.addCartItem({cartItem: itemAdd}));
+        }
+      }
+    });
   }
 }

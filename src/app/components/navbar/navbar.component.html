@@ -65,7 +65,7 @@
                             <h6>Total Price: </h6>
                     </div>
                     <div class="col-12">
-                            {{ cart.totalPrice | currency }}
+                            {{ cart.totalPrice | currency:'PHP':'symbol':'1.0-2' }}
                     </div>
                 </div>
                 <button type="button" class="btn btn-outline-warning"

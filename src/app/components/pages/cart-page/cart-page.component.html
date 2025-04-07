@@ -6,88 +6,91 @@
             </div>
         </div>
         @if(user$ | async; as user) {
-            <div class="row">
-                <div class="col-12">
-                    <div class="cart-detail-container d-flex flex-column">
-                        <div class="flex-fill overflow-y-auto border border-secondary p-3">
-                            <div class="row">
-                                <div class="col-5">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="firstName" placeholder="first name"
-                                             [value]="user.firstName" disabled>
-                                        <label for="username">First Name</label>
-                                    </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="cart-detail-container d-flex flex-column">
+                    <div class="flex-fill overflow-y-auto border border-secondary p-3">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="firstName" placeholder="first name"
+                                        [value]="user.firstName" disabled>
+                                    <label for="username">First Name</label>
                                 </div>
-                                <div class="col-7">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="lastName" placeholder="Username"
+                            </div>
+                            <div class="col-7">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="lastName" placeholder="Username"
                                         [value]="user.lastName" disabled>
-                                        <label for="username">Last Name</label>
-                                    </div>
+                                    <label for="username">Last Name</label>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-8">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="username" placeholder="Username"
+                        </div>
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="username" placeholder="Username"
                                         [value]="user.email" disabled>
-                                        <label for="username">Email Address</label>
-                                    </div>
+                                    <label for="username">Email Address</label>
                                 </div>
-                                <div class="col-4">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="username" placeholder="Username"
+                            </div>
+                            <div class="col-4">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="username" placeholder="Username"
                                         [value]="user.phoneNumber" disabled>
-                                        <label for="username">Phone Number</label>
-                                    </div>
+                                    <label for="username">Phone Number</label>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-4">
-                                    <select class="form-select border border-secondary" id="type" formControlName="type">
-                                        <option value="Guitar">Address 1</option>
-                                        <option value="Keyboard">Address 2</option>
-                                        <option value="Cello">Address 3</option>
-                                    </select>
-                                </div>
-                                <div class="col-8">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="username" placeholder="Username"
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <select class="form-select border border-secondary" id="type" formControlName="type">
+                                    <option value="Guitar">Address 1</option>
+                                    <option value="Keyboard">Address 2</option>
+                                    <option value="Cello">Address 3</option>
+                                </select>
+                            </div>
+                            <div class="col-8">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="username" placeholder="Username"
                                         [value]="user.address" disabled>
-                                        <label for="username">Address</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-4">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="username" placeholder="Username"
-                                            formControlName="userName">
-                                        <label for="username">City</label>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="username" placeholder="Username"
-                                            formControlName="userName">
-                                        <label for="username">Province</label>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="username" placeholder="Username"
-                                            formControlName="userName">
-                                        <label for="username">Zip Code</label>
-                                    </div>
+                                    <label for="username">Address</label>
                                 </div>
                             </div>
                         </div>
-                        <div class="text-end">
-                            <button class="btn btn-outline-warning mt-2" [disabled]="(cart$ | async).qtyGreaterStocks">Finish Order</button>
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="username" placeholder="Username"
+                                        formControlName="userName">
+                                    <label for="username">City</label>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="username" placeholder="Username"
+                                        formControlName="userName">
+                                    <label for="username">Province</label>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="username" placeholder="Username"
+                                        formControlName="userName">
+                                    <label for="username">Zip Code</label>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                    <div class="text-end">
+                        @if((cart$ | async); as cart) {
+                        <button class="btn btn-outline-warning mt-2" [disabled]="cart.qtyGreaterStocks"
+                            (click)="finishOrder(cart)">Finish Order</button>
+                        }
                     </div>
                 </div>
             </div>
+        </div>
         }
     </div>
     <div class="col-6">
@@ -105,3 +108,8 @@
         </div>
     </div>
 </div>
+@if(showLoader) {
+    <div class="row position-absolute top-0 w-100 h-100">
+        <app-loader class="px-0" [darken]="true" [placeholder]="true"></app-loader>
+    </div>
+}

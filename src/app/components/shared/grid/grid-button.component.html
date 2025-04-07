@@ -1,4 +1,16 @@
-<div class="d-flex justify-content-center h-100 py-1">
-    <button class="btn btn-outline-primary me-2 grid-buttons" (click)="buttonClicked('edit')"><i class="bi bi-pencil"></i></button>
-    <button class="btn btn-outline-danger grid-buttons"(click)="buttonClicked('delete')"><i class="bi bi-trash"></i></button>
-</div>
+
+
+@if(customButtons && customButtons.length > 0) {
+    <div class="d-flex justify-content-center h-100 py-1">
+        @for(cButton of customButtons; track cButton.actionName) {
+            <button [ngClass]="cButton.buttonClass" class="grid-buttons" (click)="buttonClicked(cButton.actionName)">
+                <i [ngClass]="cButton.iconClass"></i>
+            </button>
+        }
+    </div>
+} @else {
+    <div class="d-flex justify-content-center h-100 py-1">
+        <button class="btn btn-outline-primary me-2 grid-buttons" (click)="buttonClicked('edit')"><i class="bi bi-pencil"></i></button>
+        <button class="btn btn-outline-danger grid-buttons"(click)="buttonClicked('delete')"><i class="bi bi-trash"></i></button>
+    </div>
+}

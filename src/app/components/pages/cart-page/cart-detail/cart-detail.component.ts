@@ -1,4 +1,4 @@
-import { AsyncPipe, CurrencyPipe } from '@angular/common';
+import { AsyncPipe, CurrencyPipe, NgClass } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { CounterInputComponent } from '../../../shared/counter-input/counter-input.component';
@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-cart-detail',
   standalone: true,
-  imports: [AsyncPipe, CurrencyPipe, CounterInputComponent, FormsModule, NgbTooltip],
+  imports: [AsyncPipe, CurrencyPipe, CounterInputComponent, FormsModule, NgbTooltip, NgClass],
   providers: [CartService],
   templateUrl: './cart-detail.component.html',
   styleUrl: './cart-detail.component.scss'

@@ -1,1 +1,26 @@
-<p>orders-page works!</p>
+<div class="d-flex flex-column h-100">
+    <div class="row my-2">
+        <div class="col-12 page-header">
+            My Orders <i class="bi bi-basket-fill text-warning"></i>
+        </div>
+    </div>
+    <div class="row flex-fill">
+        <div class="col-12">
+            <div class="position-relative h-100 w-100">
+                    <app-grid 
+                        [ngClass]="{'opacity-25': false}"
+                        [rowData]="rowData"
+                        [colData]="colData" 
+                        [customButtons]="gridButtons"
+                        (gridButtonClicked)="gridButtonClicked($event)"></app-grid>
+                    @if(showLoader) {
+                        <app-loader></app-loader>
+                    }
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #orderItems let-modal>
+    <app-order-detail [cartId]="cartId"></app-order-detail>
+</ng-template>

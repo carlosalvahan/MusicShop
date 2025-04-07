@@ -4,17 +4,29 @@
         <div class="card-body d-flex flex-column">
             <h5 class="card-title" [ngbTooltip]="instrument().name" [openDelay]="300" >{{ instrument().name }}</h5>
             <div class="card-text">
-                {{ instrument().price | currency }}
+                {{ instrument().price | currency:'PHP':'symbol':'1.0-2' }}
             </div>
             <div class="action-buttons flex-fill">
                 @if((user$ | async).role !== 'Admin') {
-                    <button type="button" class="btn btn-outline-warning py-1 px-2" (click)="addToCart($event)" [disabled]="itemIsInCart">{{ itemIsInCart ? 'Item already in Cart' : 'Add to Cart' }}<i class="ms-2 bi bi-cart-plus"></i></button>
+                    @if((user$ | async).userName) {
+                        <button type="button" class="btn btn-outline-warning py-1 px-2" (click)="addToCart($event)" [disabled]="itemIsInCart">{{ itemIsInCart ? 'Item already in Cart' : 'Add to Cart' }}<i class="ms-2 bi bi-cart-plus"></i></button>
+                    }
                 } @else {
                     <button class="btn btn-outline-warning me-2 p-2" (click)="editInstrument($event)">Edit<i class="ms-2 bi bi-pencil-fill"></i></button>
                     <button class="btn btn-outline-danger p-2" (click)="deleteInstrument($event)">Delete<i class="ms-2 bi bi-trash-fill"></i></button>
                 }
             </div>
         </div>
+        @if(instrument().stocks < 1 && (user$ | async).role !== 'Admin') {
+            <div class=" h-100 position-absolute w-100 no-stock-card pb-5">
+                <div class="d-flex align-items-center justify-content-center h-100">
+                    <div class="d-flex justify-content-center text-danger bg-warning w-100 py-2 out-of-stock">
+                        <span class="">Out of stock</span>
+                        <i class="ms-2 bi bi-x-octagon-fill"></i>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 }
 

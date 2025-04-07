@@ -32,7 +32,21 @@ export class InstrumentListComponent implements OnInit, OnDestroy{
     this.subList.push(
       this.instrumentService.getInstrumentList().subscribe({
         next: res => {
-          this.instrumentList = [...res];
+          this.instrumentList = [...res]
+          .sort((a, b) => {
+            if (a.stocks === 0 && b.stocks === 0) {
+              return 0;
+            }
+          
+            if (a.stocks === 0) {
+              return 1;
+            }
+          
+            if (b.stocks === 0) {
+              return -1;
+            }
+            return 0;
+          });
         },
         error: e => {
           console.log(e);

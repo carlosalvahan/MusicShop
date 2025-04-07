@@ -14,18 +14,20 @@ import { CartService } from '../cart-page/services/cart-service';
 import { jwtDecode } from 'jwt-decode';
 import { CartItem } from '../../../store/cart/cart-model';
 import { CartListAction } from '../../../store/cart/cart-actions';
+import { ProjectionMapper } from '../../shared/projection-mapper/projection-mapper-service';
 
 @Component({
   selector: 'app-login-page',
   standalone: true,
   imports: [ReactiveFormsModule, NgClass, CommonModule],
-  providers: [FormMapper, CartService],
+  providers: [FormMapper, CartService, ProjectionMapper],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'
 })
 export class LoginPageComponent implements OnDestroy {
   private store = inject(Store);
   cartService = inject(CartService);
+  projectionMapper = inject(ProjectionMapper);
   subList: Subscription[] = [];
   constructor(private loginService: LoginService,
     private formMapper: FormMapper,
@@ -56,7 +58,8 @@ export class LoginPageComponent implements OnDestroy {
         return this.cartService.getCart(userId)
       })).subscribe({
         next: res => {
-          res.items = res.items.map(item => this.mapProjectionItems<CartItem>(item, 'instrument'));
+          // res.items = res.items.map(item => this.mapProjectionItems<CartItem>(item, 'instrument'));
+          res.items = res.items.map(item => this.projectionMapper.mapProjectionItems<CartItem>(item, 'instrument'));
           this.store.dispatch(CartListAction.getCartList({ cartId: res.id, cartItems: res.items }));
           const userPerm = JSON.parse(this.storageService.getItemFromSession(sessionKeys.userPerm) || '');
           if (userPerm?.role === 'admin') {
@@ -73,28 +76,10 @@ export class LoginPageComponent implements OnDestroy {
       })
     );
 
-    // setTimeout(() => {
-    //   this.cartService.getCart('e2575536-1922-4102-8a32-f7386e540ac0').subscribe();
-    // }, 20000);
   }
 
   showToast(message: string, type: string = 'secondary') {
     this.toastService.show({ message, classname: '', delay: 2000 }, type);
-  }
-
-  mapProjectionItems<T>(obj: any, propName: string) {
-    let newObj: any = {};
-    Object.keys(obj).forEach(key => {
-      const notPropId = key.toLowerCase() !== (propName.toLowerCase() + 'id');
-      const hasPropName = key.toLowerCase().includes(propName.toLowerCase());
-      if (notPropId && hasPropName) {
-        const newKey = key.replace(propName, '');
-        newObj[newKey.toLowerCase()] = obj[key];
-      } else {
-        newObj[key] = obj[key]
-      }
-    })
-    return newObj as T;
   }
 
   ngOnDestroy(): void {

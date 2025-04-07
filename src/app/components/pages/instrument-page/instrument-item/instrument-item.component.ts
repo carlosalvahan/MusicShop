@@ -60,7 +60,9 @@ export class InstrumentItemComponent implements OnInit, OnDestroy {
   }
 
   openDetails(id: number) {
-    this.router.navigate([id], { relativeTo: this.activeRoute });
+    if(this.instrument().stocks > 0) {
+      this.router.navigate([id], { relativeTo: this.activeRoute });
+    }
   }
 
 

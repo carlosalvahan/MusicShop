@@ -3,7 +3,7 @@
 @if((cartList$ | async); as cart) {
     @if(cart.cartList.length > 0) {
         @for(cartItem of cart.cartList; track cartItem.id) {
-            <div class="row border border-secondary mb-2">
+            <div class="row border mb-2" [ngClass]="cartItem.quantity > cartItem.stocks ? 'border-danger border-2' : 'border-secondary '">
                 @if(cartItem.quantity > cartItem.stocks) {
                     <div>
                         <i class="bi bi-exclamation-diamond-fill error-icon text-danger mt-2 me-2" [ngbTooltip]="'Quantity [ ' + cartItem.quantity + ' ] is greater than Stocks [ ' + cartItem.stocks +' ] on hand'"></i>
@@ -17,7 +17,7 @@
                 <div class="col-8 py-2">
                     <div class="row">
                         <div class="col-12">{{ cartItem.name }}</div>
-                        <div class="col-12">{{ cartItem.price | currency}}</div>
+                        <div class="col-12">{{ cartItem.price | currency:'PHP':'symbol':'1.0-2'}}</div>
                         <div class="col-7">
                             <app-counter-input [maxValue]="cartItem.stocks" [ngModel]="cartItem.quantity" [usingStore]="true" (storeUpdate)="quantityChanged($event, cartItem, cart.cartId)"></app-counter-input>
                         </div>

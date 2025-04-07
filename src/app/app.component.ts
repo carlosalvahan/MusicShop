@@ -7,11 +7,12 @@ import { StorageService } from './components/shared/storage/storage-service';
 import { ModalService } from './components/shared/modal/modal.service';
 import { ModalComponent, ModalContent } from './components/shared/modal/modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { LoaderComponent } from './components/shared/loader/loader.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, ToastsContainer, ModalComponent],
+  imports: [RouterOutlet, NavbarComponent, ToastsContainer, ModalComponent, LoaderComponent],
   providers: [ModalService, NgbModal],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

@@ -44,17 +44,13 @@ export class RegisterPageComponent implements OnDestroy{
     this.subList.push(
       this.regService.userRegister(reqBody).subscribe({
         next: (res) => {
-          setTimeout(() => {
             this.showToast(res.message, 'success');
             this.showLoader = false;
             this.router.navigateByUrl('/login')
-          }, 2000);
         },
         error: (e) => {
-          setTimeout(() => {
             this.showToast(e.error.message, 'danger');
             this.showLoader = false
-          }, 2000);
         }
       })
     );

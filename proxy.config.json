@@ -16,5 +16,14 @@
     "pathRewrite": {
       "^/instrumentapi": ""
     }
+  },
+  "/orderapi": {
+    "target": "https://localhost:7003",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/orderapi": ""
+    }
   }
 }

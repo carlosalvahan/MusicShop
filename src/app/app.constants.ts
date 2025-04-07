@@ -7,8 +7,10 @@ export const APIURL = {
     instrumentApi: '/instrumentapi/api/Instrument',
     instrumentById: '/instrumentapi/api/Instrument/${0}',
     getCart: '/instrumentapi/api/Cart/GetByUser/${0}',
-    updateCart: '/instrumentapi/api/Cart',
-    removeFromCart: '/instrumentapi/api/Cart/RemoveFromCart/${0}'
+    restCartApi: '/instrumentapi/api/Cart',
+    removeFromCart: '/instrumentapi/api/Cart/RemoveFromCart/${0}',
+    restOrderApi: '/orderapi/api/Order',
+    getOrdersByUser: '/orderapi/api/Order/${0}'
 }
 
 

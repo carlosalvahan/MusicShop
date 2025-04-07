@@ -13,17 +13,23 @@ import { jwtDecode } from 'jwt-decode';
 import { CartService } from '../pages/cart-page/services/cart-service';
 import { CartListAction } from '../../store/cart/cart-actions';
 import { CartItem, CartListState } from '../../store/cart/cart-model';
+import { ProjectionMapper } from '../shared/projection-mapper/projection-mapper-service';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
   imports: [RouterLink, RouterLinkActive, CommonModule, NgbDropdownModule, NgbTooltip, CartDetailComponent, CurrencyPipe],
-  providers: [CartService],
+  providers: [CartService, ProjectionMapper],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   platformId = inject(PLATFORM_ID);
+  store = inject(Store);
+  storageService = inject(StorageService);
+  cartService = inject(CartService);
+  projectionMapper = inject(ProjectionMapper)
+
   readonly adminTabs = [
     { label: 'Users', path: '/users' },
     { label: 'Orders', path: '/orders' },
@@ -42,9 +48,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ];
 
   navItems = this.guestTabs;
-  store = inject(Store);
-  storageService = inject(StorageService);
-  cartService = inject(CartService);
+  
   loggedInUser$: Observable<UserModel> = this.store.select('user');
   cart$: Observable<CartListState> = this.store.select('cartList');
   subList: Subscription[] = [];
@@ -77,7 +81,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.subList.push(
           this.cartService.getCart(userId).subscribe({
             next: (res) => {
-              res.items = res.items.map(item => this.mapProjectionItems<CartItem>(item, 'instrument'));
+              // res.items = res.items.map(item => this.mapProjectionItems<CartItem>(item, 'instrument'));
+              res.items = res.items.map(item => this.projectionMapper.mapProjectionItems<CartItem>(item, 'instrument'));
               this.store.dispatch(CartListAction.getCartList({ cartId: res.id, cartItems: res.items }));
             }
           })
@@ -129,19 +134,5 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
 
-  mapProjectionItems<T>(obj: any, propName: string) {
-    let newObj: any = {};
-    Object.keys(obj).forEach(key => {
-      const notPropId = key.toLowerCase() !== (propName.toLowerCase() + 'id');
-      const hasPropName = key.toLowerCase().includes(propName.toLowerCase());
-      if (notPropId && hasPropName) {
-        const newKey = key.replace(propName, '');
-        newObj[newKey.toLowerCase()] = obj[key];
-      } else {
-        newObj[key] = obj[key]
-      }
-    })
-    return newObj as T;
-  }
 
 }

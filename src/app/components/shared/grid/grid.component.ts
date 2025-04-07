@@ -19,8 +19,9 @@ export class ACGridComponent implements OnInit {
     @Input()
     rowData: any[] = [];
     colData = input<ColDef[]>([])
-    gridButtonClicked = output<ButtonOutput>()
+    gridButtonClicked = output<ButtonOutput>();
     buttonOutput = new ButtonOutput();
+    customButtons = input<CustomGridButtons[]>([]);
     // Row Data: The data to be displayed.
     // rowData = ;
 
@@ -30,15 +31,7 @@ export class ACGridComponent implements OnInit {
             field: "button", 
             headerName: "Actions", 
             cellRenderer: CustomButtonComponent,
-            cellRendererParams: {
-                onClick: (value: any) => {
-                    this.buttonOutput = {
-                        ...this.buttonOutput,
-                        ...value,
-                    }
-                    this.gridButtonClicked.emit(this.buttonOutput)
-                }
-            }
+            cellRendererParams: {}
         },
         
     ];
@@ -50,6 +43,16 @@ export class ACGridComponent implements OnInit {
     };
 
     ngOnInit(): void {
+        this.colDefs[0].cellRendererParams = {
+            onClick: (value: any) => {
+                this.buttonOutput = {
+                    ...this.buttonOutput,
+                    ...value,
+                }
+                this.gridButtonClicked.emit(this.buttonOutput)
+            },
+            customButtons: this.customButtons()
+        }
         this.colDefs = [...this.colDefs, ...this.colData()]
     }
 }
@@ -57,4 +60,10 @@ export class ACGridComponent implements OnInit {
 export class ButtonOutput {
     type: string = '';
     data: any = {};
+}
+
+export class CustomGridButtons {
+    buttonClass: string = '';
+    iconClass: string = '';
+    actionName: string = '';
 }

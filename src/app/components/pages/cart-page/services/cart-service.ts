@@ -12,11 +12,19 @@ export class CartService {
     }
 
     updateCart(reqBody: any) {
-        return this.httpClient.post(APIURL.updateCart, reqBody);
+        return this.httpClient.post(APIURL.restCartApi, reqBody);
     }
 
     removeItemFromCart(instrumentId: number) {
         return this.httpClient.delete(APIURL.removeFromCart.replace('${0}', instrumentId.toString()))
+    }
+
+    fulfillCart(reqBody: any) {
+        return this.httpClient.post(APIURL.restOrderApi, reqBody);
+    }
+
+    getCartById(cartId: number) {
+        return this.httpClient.get<CartDTO>(APIURL.restCartApi + '/' + cartId);
     }
 }
 

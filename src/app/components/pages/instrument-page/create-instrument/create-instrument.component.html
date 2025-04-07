@@ -39,6 +39,7 @@
                                             <option value="Cello">Cello</option>
                                             <option value="Clarinet">Clarinet</option>
                                             <option value="Flute">Flute</option>
+                                            <option value="French Horn">French Horn</option>
                                         </select>
                                     </div>
                                     <div class="col-4">
@@ -55,7 +56,7 @@
                                     <div class="col-12">
                                         <div class="px-3">
                                             <label for="formFile" class="form-label mt-2">Upload image</label>
-                                            <input class="form-control" type="file" id="formFile">
+                                            <input class="form-control" type="file" id="formFile" (change)="onFileSelected($event)">
                                         </div>
                                     </div>
                                 </div>
@@ -100,3 +101,6 @@
         </div>
     </div>
 </form>
+@if(showLoader) {
+    <app-loader [darken]="true"></app-loader>
+}

@@ -61,14 +61,15 @@ export class InstrumentDetailComponent implements OnInit, OnDestroy {
   }
 
   addToCart() {
-    const {id, name, price, stocks} = this.instrument;
+    const {id, name, price, stocks, imageUrl} = this.instrument;
     const itemAdd: CartItem = {
       id: this.cartItemId,
       name,
       price,
       stocks,
       quantity: this.quantity,
-      instrumentId: id
+      instrumentId: id,
+      imageUrl: imageUrl || ''
     }
     if(this.cartItems.length < 1) {
       this.addCartItem(itemAdd);

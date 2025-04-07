@@ -64,7 +64,8 @@ export class InstrumentListComponent implements OnInit, OnDestroy{
   }
 
   closeModal(modal: any) {
-    console.log(modal);
+    this.selectedInstrumentId = 0;
+    modal.close()
   }
 
   openEdit(id: number, template: any) {

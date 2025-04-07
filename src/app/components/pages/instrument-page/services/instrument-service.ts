@@ -21,7 +21,7 @@ export class InstrumentService {
       return this.httpClient.get<Instrument[]>(APIURL.instrumentApi);
      }
 
-     createInstrument(reqBody: Instrument): Observable<any> {
+     createInstrument(reqBody: FormData): Observable<any> {
       return this.httpClient.post(APIURL.instrumentApi, reqBody);
      }
 
@@ -29,7 +29,7 @@ export class InstrumentService {
       return this.httpClient.get<Instrument>(APIURL.instrumentById.replace('${0}', id.toString()));
      }
 
-     updateInstrument(reqBody: Instrument) {
+     updateInstrument(reqBody: FormData) {
       return this.httpClient.put(APIURL.instrumentApi, reqBody);
      }
 

@@ -83,6 +83,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
             next: (res) => {
               // res.items = res.items.map(item => this.mapProjectionItems<CartItem>(item, 'instrument'));
               res.items = res.items.map(item => this.projectionMapper.mapProjectionItems<CartItem>(item, 'instrument'));
+              console.log(res.items);
               this.store.dispatch(CartListAction.getCartList({ cartId: res.id, cartItems: res.items }));
             }
           })

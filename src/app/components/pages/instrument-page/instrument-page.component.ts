@@ -25,7 +25,7 @@ export class InstrumentPageComponent implements OnInit, OnDestroy{
         next: (res) => {
           const manufacturerGroup =  new FilterGroup('brands', res[0]);
           const instrumentTypeGroup = new FilterGroup('types', res[1]);
-          this.allFilters = [manufacturerGroup, instrumentTypeGroup]
+          this.allFilters = [instrumentTypeGroup]
         }, 
         error: (err) => {
           console.log(err);

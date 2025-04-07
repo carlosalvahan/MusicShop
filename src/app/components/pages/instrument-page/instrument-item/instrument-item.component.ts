@@ -21,7 +21,7 @@ import { CartService } from '../../cart-page/services/cart-service';
   styleUrl: './instrument-item.component.scss'
 })
 export class InstrumentItemComponent implements OnInit, OnDestroy {
-  imgSrc = `https://picsum.photos/id/${Math.floor(Math.random() * 100)}/200/150`
+  imgSrc: string = '';
   router = inject(Router);
   store = inject(Store);
   activeRoute = inject(ActivatedRoute);
@@ -53,6 +53,7 @@ export class InstrumentItemComponent implements OnInit, OnDestroy {
         this.itemIsInCart = Boolean(itemInCart);
       })
     );
+    this.imgSrc = this.instrument().imageUrl || `https://picsum.photos/id/${this.instrument().id}/200/150`;
   }
 
   ngOnDestroy(): void {
@@ -88,14 +89,15 @@ export class InstrumentItemComponent implements OnInit, OnDestroy {
 
   addToCart(e: Event) {
     e.stopPropagation();
-    const { id, name, price, stocks } = this.instrument();
+    const { id, name, price, stocks, imageUrl } = this.instrument();
     const itemAdd: CartItem = {
       id: this.cartItemId,
       name,
       price,
       stocks,
       quantity: 1,
-      instrumentId: id
+      instrumentId: id,
+      imageUrl: imageUrl || ''
     }
     if(this.cartItems.length < 1) {
       this.addCartItem(itemAdd);

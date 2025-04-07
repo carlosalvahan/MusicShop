@@ -34,5 +34,5 @@
      } -->
 </div>
 <ng-template #createInstrument let-modal>
-    <app-create-instrument [editInstrument]="selectedInstrumentId" (closeModal)="modal.close()"></app-create-instrument>
+    <app-create-instrument [editInstrument]="selectedInstrumentId" (closeModal)="closeModal(modal)"></app-create-instrument>
 </ng-template>

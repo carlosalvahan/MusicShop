@@ -14,4 +14,5 @@ export class CartItem {
     price: number = 0;
     stocks: number = 0;
     instrumentId: number = 0;
+    imageUrl: string = '';
 }

@@ -9,7 +9,8 @@ export class ProjectionMapper {
           const hasPropName = key.toLowerCase().includes(propName.toLowerCase());
           if (notPropId && hasPropName) {
             const newKey = key.replace(propName, '');
-            newObj[newKey.toLowerCase()] = obj[key];
+            const useKey = newKey === 'ImageUrl' ? 'imageUrl' : newKey.toLowerCase();
+            newObj[useKey] = obj[key];
           } else {
             newObj[key] = obj[key]
           }

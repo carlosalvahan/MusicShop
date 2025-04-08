@@ -26,12 +26,16 @@ export class InstrumentListComponent implements OnInit, OnDestroy{
   instrumentList: Instrument[] = [];
   subList: Subscription[] = [];
   selectedInstrumentId: number = 0;
+  instrumentLoading: boolean = false;
+  
 
   ngOnInit(): void {
     this.loggedInUser$ = this.store.select('user');
+    this.instrumentLoading = true;
     this.subList.push(
       this.instrumentService.getInstrumentList().subscribe({
         next: res => {
+          this.instrumentLoading = false;
           this.instrumentList = [...res]
           .sort((a, b) => {
             if (a.stocks === 0 && b.stocks === 0) {

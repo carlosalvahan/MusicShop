@@ -32,8 +32,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   readonly adminTabs = [
     { label: 'Users', path: '/users' },
-    { label: 'Orders', path: '/orders' },
-    { label: 'Instruments', path: '/instruments' }
+    { label: 'Instruments', path: '/instruments' },
+    { label: 'Orders', path: '/orders' }
   ];
 
   readonly guestTabs = [

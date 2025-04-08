@@ -3,8 +3,8 @@
         <div class="col-12">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search" aria-label="Search"
-                    aria-describedby="button-addon2">
-                <button class="btn btn-primary" type="button" id="button-addon2"><i class="bi bi-search"></i></button>
+                    aria-describedby="button-addon2" [(ngModel)]="searchText">
+                <button class="btn btn-primary" type="button" id="button-addon2" (click)="filterChanged()"><i class="bi bi-search"></i></button>
             </div>
         </div>
     </div>
@@ -14,7 +14,7 @@
             @for(filterGroup of filterItems(); track filterGroup.group) {
                 <div [ngbAccordionItem]="filterGroup.group">
                     <h2 ngbAccordionHeader>
-                        <button ngbAccordionButton>{{ filterGroup.group | titlecase }}</button>
+                        <button ngbAccordionButton>{{ filterGroup.groupLabel | titlecase }}</button>
                     </h2>
                     <div ngbAccordionCollapse>
                         <div ngbAccordionBody>
@@ -23,7 +23,7 @@
                                     @for(filterItem of filterGroup.filterItems; track filterItem.label) {
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="filterItem.label" [id]="filterGroup.group + filterItem.label"
-                                            checked="filterItem.value">
+                                            checked="filterItem.value" [(ngModel)]="filterItem.value" (change)="filterChanged()">
                                         <label class="form-check-label" [for]="filterGroup.group + filterItem.label">
                                             {{ filterItem.label }}
                                         </label>

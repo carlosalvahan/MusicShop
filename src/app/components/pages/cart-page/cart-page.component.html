@@ -84,7 +84,7 @@
                     </div>
                     <div class="text-end">
                         @if((cart$ | async); as cart) {
-                        <button class="btn btn-outline-warning mt-2" [disabled]="cart.qtyGreaterStocks"
+                        <button class="btn btn-outline-warning mt-2" [disabled]="cart.qtyGreaterStocks || cart.cartList.length < 1"
                             (click)="finishOrder(cart)">Finish Order</button>
                         }
                     </div>

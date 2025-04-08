@@ -24,7 +24,7 @@ export class InstrumentPageComponent implements OnInit, OnDestroy{
       forkJoin(this.filterSubs).subscribe({
         next: (res) => {
           const manufacturerGroup =  new FilterGroup('brands', res[0]);
-          const instrumentTypeGroup = new FilterGroup('types', res[1]);
+          const instrumentTypeGroup = new FilterGroup('type', res[1], 'Instrument Type');
           this.allFilters = [instrumentTypeGroup]
         }, 
         error: (err) => {

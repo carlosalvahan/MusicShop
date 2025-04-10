@@ -5,7 +5,7 @@
             <button class="btn" (click)="closeModal.emit()"><i class="bi bi-x-lg"></i></button>
         </div>
     </div>
-    <div class="flex-fill">
+    <div class="flex-fill cart-items-container">
         <div class="container my-2">
             @for(item of orderItems; track item.id) {
                 <div class="row row mx-2 mb-2 border">

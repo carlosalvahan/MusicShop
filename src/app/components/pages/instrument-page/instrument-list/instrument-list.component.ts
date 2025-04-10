@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { InstrumentItemComponent } from '../instrument-item/instrument-item.component';
 import { Observable, Subscription } from 'rxjs';
 import { UserModel } from '../../../../store/user/user-model';
@@ -8,6 +8,8 @@ import { InstrumentService } from '../services/instrument-service';
 import { Instrument } from '../instrument-model';
 import { CreateInstrumentComponent } from '../create-instrument/create-instrument.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { UnsubClass } from '../../../shared/unsub-components/unsub-class';
+import { FilterListState } from '../../../../store/filters/filter-model';
 
 @Component({
   selector: 'app-instrument-list',
@@ -17,14 +19,14 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './instrument-list.component.html',
   styleUrl: './instrument-list.component.scss'
 })
-export class InstrumentListComponent implements OnInit, OnDestroy{
+export class InstrumentListComponent extends UnsubClass implements OnInit {
   loggedInUser$!: Observable<UserModel>;
 
   store = inject(Store);
   modalService = inject(NgbModal);
   instrumentService = inject(InstrumentService);
   instrumentList: Instrument[] = [];
-  subList: Subscription[] = [];
+  displayList: Instrument[] = [];
   selectedInstrumentId: number = 0;
   instrumentLoading: boolean = false;
   
@@ -51,16 +53,47 @@ export class InstrumentListComponent implements OnInit, OnDestroy{
             }
             return 0;
           });
+          this.displayList = [...this.instrumentList];
         },
         error: e => {
           console.log(e);
+        }
+      }),
+      this.store.select('filters').subscribe({
+        next: (res: FilterListState) => {
+          const conditions: {group: string, trueValues:string[]}[] = [];
+          res.filters.forEach(group => {
+            if(typeof group.filterItems[0].value === 'boolean') {
+              const trueItems = group.filterItems.filter(item => item.value === true).map(fItem => fItem.label);
+              conditions.push({group: group.group, trueValues: trueItems })
+            }
+          });
+          this.displayList = this.instrumentList.filter((instrument: Instrument) => {
+            const filterCondition: boolean[] = [];
+            if(res.searchText) {
+              filterCondition.push(instrument.name?.toLowerCase().includes(res.searchText?.toLowerCase()));
+            }
+            conditions.forEach(cond => {
+              const instruValue = this.getInstrumentValueByKey(instrument, cond.group)?.toString();
+              if(instruValue) {
+                filterCondition.push(cond.trueValues.includes(instruValue))
+              }
+            });
+            return filterCondition.every(Boolean);
+          });
         }
       })
     );
   }
 
-  ngOnDestroy(): void {
-    this.subList.forEach(sub => { sub.unsubscribe() })
+  getInstrumentValueByKey(instrument: Instrument, groupKey: string) {
+    const instruKey = Object.keys(instrument).find(key => key === groupKey) as keyof Instrument|| '';
+    if(instruKey) {
+      if(groupKey === 'stocks')
+      console.log(instrument[instruKey]);
+      return instrument[instruKey];
+    }
+    return '';
   }
 
   openInstrumentModal(template: any) {

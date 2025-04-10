@@ -1,8 +1,11 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { FilterGroup, SideFilterComponent } from '../../shared/side-filter/side-filter.component';
+import { SideFilterComponent } from '../../shared/side-filter/side-filter.component';
 import { InstrumentService } from './services/instrument-service';
 import { forkJoin, Observable, Subscription } from 'rxjs';
 import { InstrumentListComponent } from './instrument-list/instrument-list.component';
+import { FilterGroup } from '../../../store/filters/filter-model';
+import { Store } from '@ngrx/store';
+import { FilterListActions } from '../../../store/filters/filter-actions';
 
 @Component({
   selector: 'app-instrument-page',
@@ -14,6 +17,7 @@ import { InstrumentListComponent } from './instrument-list/instrument-list.compo
 })
 export class InstrumentPageComponent implements OnInit, OnDestroy{
   instrumentService = inject(InstrumentService);
+  store = inject(Store);
   allFilters: FilterGroup[] = [];
   filterSubs: Observable<any>[] = [];
   subList: Subscription[] = [];
@@ -26,12 +30,14 @@ export class InstrumentPageComponent implements OnInit, OnDestroy{
           const manufacturerGroup =  new FilterGroup('brands', res[0]);
           const instrumentTypeGroup = new FilterGroup('type', res[1], 'Instrument Type');
           this.allFilters = [instrumentTypeGroup]
+          this.store.dispatch(FilterListActions.getFilters({filters: this.allFilters}))
         }, 
         error: (err) => {
           console.log(err);
         }
       })
     );
+    
   }
 
   ngOnDestroy(): void {

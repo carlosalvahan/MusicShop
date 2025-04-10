@@ -19,7 +19,7 @@
          }
     } @else {
         @if((loggedInUser$ | async)?.role === 'Admin') {
-            <div class="col-4 mt-2 " (click)="modalService.open(createInstrument, {size: 'lg'})">
+            <div class="col-4 mt-2 instrument-item-col" (click)="modalService.open(createInstrument, {size: 'lg'})">
                 <div class="card h-100 w-100 d-flex align-items-center justify-content-center">
                     <div class="text-center">
                         <button class="btn btn-link"><i class="bi bi-plus-square-dotted add-icon"></i></button>
@@ -28,7 +28,7 @@
                 </div>
             </div>
         }
-        @for(instrument of instrumentList; track instrument.id) {
+        @for(instrument of displayList; track instrument.id) {
         <div class="col-4 mt-2 instrument-item-col">
             <app-instrument-item [instrument]="instrument" (deleteItem)="deleteItem($event)" (openEdit)="openEdit(instrument.id, createInstrument)"></app-instrument-item>
         </div>

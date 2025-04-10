@@ -4,14 +4,14 @@
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search" aria-label="Search"
                     aria-describedby="button-addon2" [(ngModel)]="searchText">
-                <button class="btn btn-primary" type="button" id="button-addon2" (click)="filterChanged()"><i class="bi bi-search"></i></button>
+                <button class="btn btn-primary" type="button" id="button-addon2" (click)="onSearchClicked()"><i class="bi bi-search"></i></button>
             </div>
         </div>
     </div>
     <div class="row mt-2 overflow-y-auto flex-fill">
-            @if(filterItems().length > 0) {
+            @if((filterList$ | async); as filterList) {
             <div ngbAccordion #accordion="ngbAccordion" class="my-2">
-            @for(filterGroup of filterItems(); track filterGroup.group) {
+            @for(filterGroup of filterList.filters; track filterGroup.group) {
                 <div [ngbAccordionItem]="filterGroup.group">
                     <h2 ngbAccordionHeader>
                         <button ngbAccordionButton>{{ filterGroup.groupLabel | titlecase }}</button>
@@ -22,8 +22,8 @@
                                 @if(filterGroup.filterItems) {
                                     @for(filterItem of filterGroup.filterItems; track filterItem.label) {
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="filterItem.label" [id]="filterGroup.group + filterItem.label"
-                                            checked="filterItem.value" [(ngModel)]="filterItem.value" (change)="filterChanged()">
+                                        <input class="form-check-input" type="checkbox" [id]="filterGroup.group + filterItem.label"
+                                            checked="filterItem.value" (change)="filterChanged(filterGroup.group, filterItem.label, $event, filterGroup.filterItems)">
                                         <label class="form-check-label" [for]="filterGroup.group + filterItem.label">
                                             {{ filterItem.label }}
                                         </label>

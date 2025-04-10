@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CartDetailComponent } from './cart-detail/cart-detail.component';
 import { Store } from '@ngrx/store';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { CartListState } from '../../../store/cart/cart-model';
 import { CartService } from './services/cart-service';
@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-cart-page',
   standalone: true,
-  imports: [CartDetailComponent, AsyncPipe, LoaderComponent],
+  imports: [CartDetailComponent, AsyncPipe, LoaderComponent, CurrencyPipe],
   providers: [CartService],
   templateUrl: './cart-page.component.html',
   styleUrl: './cart-page.component.scss'

@@ -1,51 +1,41 @@
-import { Component, input, OnInit, output } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoaderComponent } from '../loader/loader.component';
-import { TitleCasePipe } from '@angular/common';
+import { AsyncPipe, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { FilterItem } from '../../../store/filters/filter-model';
+import { Store } from '@ngrx/store';
+import { FilterListActions } from '../../../store/filters/filter-actions';
 
 @Component({
   selector: 'app-side-filter',
   standalone: true,
-  imports: [NgbAccordionModule, LoaderComponent, TitleCasePipe, FormsModule],
+  imports: [NgbAccordionModule, LoaderComponent, TitleCasePipe, FormsModule, AsyncPipe],
   templateUrl: './side-filter.component.html',
   styleUrl: './side-filter.component.scss'
 })
 
 export class SideFilterComponent {
-  filterItems = input<FilterGroup[] | []>([]);
+  store = inject(Store);
   searchText: string = '';
+  filterList$ = this.store.select('filters');
 
-  filterChanged() {
-    const filterReturn: FilterReturn = {
-      searchText: this.searchText,
-      filter: this.filterItems()
-    };
+  filterChanged(group: string, label: string, e: any, filterItems: FilterItem[]) {
+    let filterItem = filterItems.find(filter => filter.label === label);
+    let retValue: string | number | boolean = '';
+    if(filterItem) {
+      const valueType =  typeof filterItem.value === 'boolean';
+      if(valueType) {
+        retValue = !filterItem.value;
+      }
+    }
+    this.store.dispatch(FilterListActions.updateFilter({group, label, value: retValue}))
+  }
+
+  onSearchClicked() {
+    this.store.dispatch(FilterListActions.updateSearchText({searchTxt: this.searchText}))
   }
 }
 
 
-export class FilterGroup {
- constructor(group: string, filterItems: FilterItem[], groupLabel?: string) {
-  this.group = group;
-  this.groupLabel = groupLabel || this.group;
-  this.filterItems = filterItems;
- }
- group: string;
- filterItems: FilterItem[] = [];
- groupLabel: string;
-}
 
-export class FilterItem {
-  constructor(label: string, value: boolean) {
-    this.label = label;
-    this.value = value;
-   }
-  label:string;
-  value:boolean;
-}
-
-export class FilterReturn {
-  searchText: string = '';
-  filter: FilterGroup[] = [];
-}

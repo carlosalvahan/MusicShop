@@ -19,3 +19,8 @@
         width: 100%;
     }
 }
+
+.cart-items-container {
+    height: calc(100vh - 15rem);
+    overflow-y: auto;
+}

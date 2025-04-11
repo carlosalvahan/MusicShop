@@ -22,7 +22,7 @@
 </div>
 
 <ng-template #orderItems let-modal>
-    <app-order-detail [cartId]="cartId"></app-order-detail>
+    <app-order-detail [cartId]="cartId" (closeModal)="modal.close()"></app-order-detail>
 </ng-template>
 
 <ng-template #userDetail let-modal>

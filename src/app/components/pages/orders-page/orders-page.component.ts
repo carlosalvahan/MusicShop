@@ -13,23 +13,26 @@ import { LoaderComponent } from '../../shared/loader/loader.component';
 import { OrderAdmin } from './services/order-admin-model';
 import { OrderDetailComponent } from './order-detail/order-detail.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { UserModel } from '../../../store/user/user-model';
+import { UserDetailComponent } from '../users-page/user-detail/user-detail/user-detail.component';
 
 @Component({
   selector: 'app-orders-page',
   standalone: true,
-  imports: [ACGridComponent, NgClass, LoaderComponent, OrderDetailComponent],
+  imports: [ACGridComponent, NgClass, LoaderComponent, OrderDetailComponent, UserDetailComponent],
   providers: [OrderService, ColumnModelMapper, NgbModal],
   templateUrl: './orders-page.component.html',
   styleUrl: './orders-page.component.scss'
 })
 export class OrdersPageComponent implements OnInit, OnDestroy{
   @ViewChild('orderItems', { static: false }) orderDetailTemplate!: TemplateRef<any>;
+  @ViewChild('userDetail', { static: false }) userDetailTemplate!: TemplateRef<any>;
 
   orderService = inject(OrderService);
   storageService = inject(StorageService);
   modalService = inject(NgbModal);
-
   mapper = inject(ColumnModelMapper);
+
   subList: Subscription[] = [];
   colData: ColDef[] = [];
   rowData: any[] = [];
@@ -38,6 +41,7 @@ export class OrdersPageComponent implements OnInit, OnDestroy{
   ];
   showLoader: boolean = false;
   cartId: number = 0;
+  userInfo: UserModel = new UserModel();
   
 
   ngOnInit(): void {
@@ -70,13 +74,26 @@ export class OrdersPageComponent implements OnInit, OnDestroy{
     console.log(this.orderDetailTemplate);
     console.log(e.data.cartID);
       switch(e.type) {
-        case 'viewUsers': console.log('viewuser');break;
+        case 'viewUsers':
+          this.retrieveUserData(e?.data?.userID);  
+          ;break;
         case 'viewOrder': {
           this.cartId = e.data.cartID;
           this.modalService.open(this.orderDetailTemplate, {size: 'lg'});
         };break;
         default: 
       }
+    }
+
+    retrieveUserData(userId: string) {
+      this.subList.push(
+        this.orderService.getUserInfo(userId).subscribe({
+          next: (res: any) => {
+            this.userInfo = res?.result;
+            this.modalService.open(this.userDetailTemplate, {size: 'lg'});
+          }
+        })
+      );
     }
 
 }

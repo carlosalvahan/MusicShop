@@ -17,3 +17,8 @@
         </div>
     </div>
 </div>
+
+
+<ng-template #userDetailTemplate let-modal>
+    <app-user-detail [userDetails]="userEdit" (closeModal)="modal.close()"></app-user-detail>
+</ng-template>

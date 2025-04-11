@@ -3,6 +3,8 @@ export const APIURL = {
     getRolesApi: '/authapi/api/auth/GetRoles',
     loginApi: '/authapi/api/auth/login',
     getUsers: '/authapi/api/auth/GetUsersAdmin',
+    restAuthApi: '/authapi/api/auth',
+    updateUser: '/authapi/api/auth/UpdateUser',
     deleteUsers: '/authapi/api/auth/DeleteUser?id=',
     instrumentApi: '/instrumentapi/api/Instrument',
     instrumentById: '/instrumentapi/api/Instrument/${0}',

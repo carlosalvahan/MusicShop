@@ -24,3 +24,7 @@
 <ng-template #orderItems let-modal>
     <app-order-detail [cartId]="cartId"></app-order-detail>
 </ng-template>
+
+<ng-template #userDetail let-modal>
+    <app-user-detail [userDetails]="userInfo" [fieldsReadOnly]="true" (closeModal)="modal.close()"></app-user-detail>
+</ng-template>

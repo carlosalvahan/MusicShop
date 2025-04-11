@@ -15,4 +15,8 @@ export class UserListService {
     deleteUser(id: string) {
         return this.httpClient.delete(APIURL.deleteUsers + id);
     }
+
+    updateUser(user: UserModel) {
+        return this.httpClient.post(APIURL.updateUser, user);
+    }
 }

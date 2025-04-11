@@ -1,0 +1,92 @@
+<div class="order-detail d-flex flex-column ">
+    <div class="border border-top">
+        <div class="d-flex align-items-center justify-content-between ps-2 py-1">
+            <h3>User Details</h3>
+            <button class="btn" (click)="closeModal.emit()"><i class="bi bi-x-lg"></i></button>
+        </div>
+    </div>
+    <div class="flex-fill cart-items-container">
+        <div class="container my-2">
+            <form [formGroup]="registrationForm">
+                <div class="row my-2 py-2 position-relative" [ngClass]="{'opacity-50': showLoader}">
+                    <div class="col-6">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="username" placeholder="Username"
+                                formControlName="userName" [readonly]="fieldsReadOnly()">
+                            <label for="username">Username</label>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3  d-flex align-items-center form-floating mb-3">
+                            <select class="form-select border border-secondary h-100" id="Role" formControlName="role">
+                                <option value="Admin">Admin</option>
+                                <option value="User">User</option>
+                            </select>
+                            <label for="Role">Role</label>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="firstName" placeholder="First Name"
+                                formControlName="firstName" [readonly]="fieldsReadOnly()">
+                            <label for="firstName">First Name</label>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="lastName" placeholder="Last Name"
+                                formControlName="lastName" [readonly]="fieldsReadOnly()">
+                            <label for="lastName">Last Name</label>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="email" placeholder="name@example.com"
+                                formControlName="email" [readonly]="fieldsReadOnly()">
+                            <label for="email">Email address</label>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="mobileNum" placeholder="mobileNum"
+                                formControlName="phoneNumber" [readonly]="fieldsReadOnly()">
+                            <label for="mobileNum">Mobile number</label>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-2">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="address" placeholder="address"
+                                formControlName="address" [readonly]="fieldsReadOnly()">
+                            <label for="address">Address</label>
+                        </div>
+                    </div>
+                    @if(showLoader) {
+                    <div
+                        class="spinner-container position-absolute top-0 w-100 h-100 d-flex align-items-center justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only"></span>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="border border-top d-flex justify-content-between">
+        @if(fieldsReadOnly()) {
+                <div class="my-2 mx-3 justify-content-end d-flex w-100">
+                    <button class="btn btn-outline-danger" (click)="closeModal.emit()">Close</button>
+                </div>
+        } @else {
+            <div class="col-6 d-flex align-items-center ms-2">
+                <span class="text-info">* All fields are required</span>
+            </div>
+            <div class="col-6">
+                <div class="my-2 mx-3 justify-content-end d-flex">
+                    <button class="btn btn-outline-primary me-2" (click)="formSubmit()">Update</button>
+                    <button class="btn btn-outline-danger" (click)="closeModal.emit()">Cancel</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,11 +1,11 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ACGridComponent, ButtonOutput } from '../../shared/grid/grid.component';
 import { ColumnModelMapper } from '../../shared/grid/column-model-mapper/column-model-mapper.service';
 import { UserModel } from '../../../store/user/user-model'
 import type { ColDef } from 'ag-grid-community';
 import { Store } from '@ngrx/store';
 import { UserListActions } from '../../../store/user-list/user-list-actions';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { LoaderComponent } from '../../shared/loader/loader.component';
 import { userListState } from '../../../store/user-list/user-list-model';
@@ -14,26 +14,31 @@ import { ToastService } from '../../shared/toast/toast-service';
 import { ModalComponent, ModalContent } from '../../shared/modal/modal.component';
 import { ModalService } from '../../shared/modal/modal.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { UnsubClass } from '../../shared/unsub-components/unsub-class';
+import { UserDetailComponent } from './user-detail/user-detail/user-detail.component';
 
 @Component({
   selector: 'app-users-page',
   standalone: true,
-  imports: [ACGridComponent, AsyncPipe, LoaderComponent, ModalComponent, NgClass],
+  imports: [ACGridComponent, AsyncPipe, LoaderComponent, ModalComponent, NgClass, UserDetailComponent],
   templateUrl: './users-page.component.html',
   providers: [ColumnModelMapper, UserListService, NgbModal],
   styleUrl: './users-page.component.scss'
 })
-export class UsersPageComponent implements OnInit, OnDestroy {
+export class UsersPageComponent extends UnsubClass implements OnInit {
+  @ViewChild('userDetailTemplate', { static: false }) userDetailTemplate!: TemplateRef<any>;
   mapper = inject(ColumnModelMapper);
   store = inject(Store);
   toast = inject(ToastService)
   userService = inject(UserListService);
   modalService = inject(ModalService);
+  ngbModalService = inject(NgbModal);
   userListState$ = new Observable<userListState>;
   modalContent: ModalContent = new ModalContent();
   userData: any[] = [];
   colData: ColDef[] = [];
-  subList: Subscription[] = [];
+  userEdit: UserModel = new UserModel();
+
 
   ngOnInit(): void {
     this.colData = this.mapper.mapModelToColumn(new UserModel(), ['id']);
@@ -45,16 +50,23 @@ export class UsersPageComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy(): void {
-    this.subList.forEach(sub => { sub.unsubscribe() })
-  }
 
   gridButtonClicked(e: ButtonOutput) {
     switch(e.type) {
       case 'delete': this.deleteUserConfirm(e?.data);break;
-      case 'edit': this.store.dispatch(UserListActions.userLoading({ loading: true }));break;
+      case 'edit': {
+        this.userEdit = {
+          ...this.userEdit,
+          ...e?.data
+        }
+        this.editUser()
+      };break;
       default: 
     }
+  }
+
+  editUser() {
+    this.ngbModalService.open(this.userDetailTemplate, {size: 'lg'});
   }
 
   deleteUserConfirm(data: any) {

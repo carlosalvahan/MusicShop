@@ -37,7 +37,7 @@ export class CreateInstrumentComponent implements OnInit, OnDestroy {
   })
 
   activeIndex: number = 0;
-  closeModal = output<void>();
+  closeModal = output<boolean>();
   editInstrument = input<number>(0);
   subList: Subscription[] = [];
   imageInfo = {
@@ -89,12 +89,12 @@ export class CreateInstrumentComponent implements OnInit, OnDestroy {
           next: (res) => {
             this.showLoader = false;
             this.toastService.show({message: 'Instrument created successfully.'}, 'success');
-            this.closeModal.emit();
+            this.closeModal.emit(true);
           },
           error: (e) => {
             this.showLoader = false;
             console.log(e);
-            this.closeModal.emit();
+            this.closeModal.emit(false);
           }
         })
       );
@@ -113,7 +113,7 @@ export class CreateInstrumentComponent implements OnInit, OnDestroy {
           next: (res) => {
             this.showLoader = false;
             this.toastService.show({message: 'Instrument updated successfully.'}, 'success');
-            this.closeModal.emit();
+            this.closeModal.emit(true);
           }
         })
       );

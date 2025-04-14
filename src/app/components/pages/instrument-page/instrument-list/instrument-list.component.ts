@@ -10,6 +10,8 @@ import { CreateInstrumentComponent } from '../create-instrument/create-instrumen
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UnsubClass } from '../../../shared/unsub-components/unsub-class';
 import { FilterListState } from '../../../../store/filters/filter-model';
+import { FilterListActions } from '../../../../store/filters/filter-actions';
+import { ToastService } from '../../../shared/toast/toast-service';
 
 @Component({
   selector: 'app-instrument-list',
@@ -25,40 +27,20 @@ export class InstrumentListComponent extends UnsubClass implements OnInit {
   store = inject(Store);
   modalService = inject(NgbModal);
   instrumentService = inject(InstrumentService);
+  toastService = inject(ToastService);
+
   instrumentList: Instrument[] = [];
   displayList: Instrument[] = [];
   selectedInstrumentId: number = 0;
   instrumentLoading: boolean = false;
+  searchText: string = '';
   
 
   ngOnInit(): void {
     this.loggedInUser$ = this.store.select('user');
     this.instrumentLoading = true;
+    this.getInstrumentList();
     this.subList.push(
-      this.instrumentService.getInstrumentList().subscribe({
-        next: res => {
-          this.instrumentLoading = false;
-          this.instrumentList = [...res]
-          .sort((a, b) => {
-            if (a.stocks === 0 && b.stocks === 0) {
-              return 0;
-            }
-          
-            if (a.stocks === 0) {
-              return 1;
-            }
-          
-            if (b.stocks === 0) {
-              return -1;
-            }
-            return 0;
-          });
-          this.displayList = [...this.instrumentList];
-        },
-        error: e => {
-          console.log(e);
-        }
-      }),
       this.store.select('filters').subscribe({
         next: (res: FilterListState) => {
           const conditions: {group: string, trueValues:string[]}[] = [];
@@ -70,6 +52,7 @@ export class InstrumentListComponent extends UnsubClass implements OnInit {
           });
           this.displayList = this.instrumentList.filter((instrument: Instrument) => {
             const filterCondition: boolean[] = [];
+            this.searchText = res.searchText;
             if(res.searchText) {
               filterCondition.push(instrument.name?.toLowerCase().includes(res.searchText?.toLowerCase()));
             }
@@ -100,9 +83,47 @@ export class InstrumentListComponent extends UnsubClass implements OnInit {
     this.modalService.open(template);
   }
 
-  closeModal(modal: any) {
+  closeModal(e: boolean, modal: any) {
+    console.log(e);
+    if(e) {
+      this.getInstrumentList(true);
+    }
     this.selectedInstrumentId = 0;
     modal.close()
+  }
+
+  getInstrumentList(secondRetrieve: boolean = false) {
+    this.instrumentLoading = true;
+    this.subList.push(
+      this.instrumentService.getInstrumentList().subscribe({
+        next: res => {
+          this.instrumentLoading = false;
+          this.instrumentList = [...res]
+          .sort((a, b) => {
+            if (a.stocks === 0 && b.stocks === 0) {
+              return 0;
+            }
+          
+            if (a.stocks === 0) {
+              return 1;
+            }
+          
+            if (b.stocks === 0) {
+              return -1;
+            }
+            return 0;
+          });
+          this.displayList = [...this.instrumentList];
+          if(secondRetrieve){
+            this.store.dispatch(FilterListActions.updateSearchText({searchTxt: this.searchText}))
+          }
+          this.instrumentLoading = false;
+        },
+        error: e => {
+          this.instrumentLoading = false;
+        }
+      })
+    );
   }
 
   openEdit(id: number, template: any) {
@@ -111,11 +132,15 @@ export class InstrumentListComponent extends UnsubClass implements OnInit {
   }
 
   deleteItem(e: number) {
-    console.log('delete number', e);
+    this.instrumentLoading = true;
     this.subList.push(
       this.instrumentService.deleteInstrument(e).subscribe({
         next: (res) => {
-          console.log(res);
+          this.getInstrumentList(true);
+          this.toastService.show({message: 'Item deleted successfully.'}, 'danger')
+        }, 
+        error: () => {
+          this.instrumentLoading = false;
         }
       })
     );

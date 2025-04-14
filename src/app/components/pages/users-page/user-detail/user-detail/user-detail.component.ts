@@ -5,6 +5,9 @@ import { UserModel } from '../../../../../store/user/user-model';
 import { UserListService } from '../../services/user-list.service';
 import { UnsubClass } from '../../../../shared/unsub-components/unsub-class';
 import { ToastService } from '../../../../shared/toast/toast-service';
+import { Store } from '@ngrx/store';
+import { UserActions } from '../../../../../store/user/user-actions';
+import { UserListActions } from '../../../../../store/user-list/user-list-actions';
 
 @Component({
   selector: 'app-user-detail',
@@ -17,6 +20,7 @@ import { ToastService } from '../../../../shared/toast/toast-service';
 export class UserDetailComponent extends UnsubClass implements OnInit{
   userService = inject(UserListService);
   toastService = inject(ToastService);
+  store = inject(Store);
 
   userDetails = input<UserModel>(new UserModel());
   fieldsReadOnly = input<boolean>(false);
@@ -49,11 +53,11 @@ export class UserDetailComponent extends UnsubClass implements OnInit{
         [key]: this.registrationForm.get(key)?.getRawValue()
       }
     });
-    console.log(userSubmit);
     this.subList.push(
       this.userService.updateUser(userSubmit).subscribe({
         next: res => {
           this.toastService.show({message: `User ${userSubmit.userName} has been updated.`}, 'success');
+          this.store.dispatch(UserListActions.updateUser({user: userSubmit}))
           this.closeModal.emit();
         }
       })

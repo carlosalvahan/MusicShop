@@ -11,24 +11,22 @@ import { authInterceptor } from './app-interceptor';
 import { LoginService } from './components/pages/login-page/services/login.service';
 import { cartListReducer } from './store/cart/cart-list-reducer';
 import { filterListReducer } from './store/filters/filter-reducer';
+import { provideEffects } from '@ngrx/effects';
+import { UserListEffects } from './store/user-list/user-list-effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes,
-      withHashLocation(),
-    ),
+    provideRouter(routes, withHashLocation()),
     provideClientHydration(),
-    provideHttpClient(
-      withFetch(),
-      withInterceptors([authInterceptor]),
-    ),
+    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
     provideStore({
-      user: userReducer,
-      userList: userListReducer,
-      cartList: cartListReducer,
-      filters: filterListReducer
+        user: userReducer,
+        userList: userListReducer,
+        cartList: cartListReducer,
+        filters: filterListReducer
     }),
-    LoginService
-  ]
+    LoginService,
+    provideEffects([UserListEffects])
+]
 };

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoaderComponent } from '../loader/loader.component';
 import { AsyncPipe, TitleCasePipe } from '@angular/common';
@@ -12,7 +12,8 @@ import { FilterListActions } from '../../../store/filters/filter-actions';
   standalone: true,
   imports: [NgbAccordionModule, LoaderComponent, TitleCasePipe, FormsModule, AsyncPipe],
   templateUrl: './side-filter.component.html',
-  styleUrl: './side-filter.component.scss'
+  styleUrl: './side-filter.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class SideFilterComponent {

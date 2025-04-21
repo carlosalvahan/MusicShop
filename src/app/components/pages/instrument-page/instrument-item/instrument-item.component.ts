@@ -1,4 +1,4 @@
-import { Component, inject, input, OnDestroy, OnInit, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, OnDestroy, OnInit, output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Instrument } from '../instrument-model';
 import { AsyncPipe, CurrencyPipe } from '@angular/common';
@@ -18,7 +18,8 @@ import { CartService } from '../../cart-page/services/cart-service';
   imports: [CurrencyPipe, NgbTooltipModule, AsyncPipe],
   providers: [InstrumentService, CartService],
   templateUrl: './instrument-item.component.html',
-  styleUrl: './instrument-item.component.scss'
+  styleUrl: './instrument-item.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InstrumentItemComponent implements OnInit, OnDestroy {
   imgSrc: string = '';

@@ -1,4 +1,4 @@
-import { Component, inject, input, OnDestroy, OnInit, output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input, OnDestroy, OnInit, output } from '@angular/core';
 import { WizardComponent, WizardItem } from '../../../shared/wizard/wizard.component';
 import { NgbNav, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -15,12 +15,14 @@ import { ToastService } from '../../../shared/toast/toast-service';
   imports: [WizardComponent, NgbNavModule, ReactiveFormsModule, LoaderComponent],
   providers: [NgbNav, FormMapper],
   templateUrl: './create-instrument.component.html',
-  styleUrl: './create-instrument.component.scss'
+  styleUrl: './create-instrument.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateInstrumentComponent implements OnInit, OnDestroy {
   mapper = inject(FormMapper);
   instrumentService = inject(InstrumentService);
   toastService = inject(ToastService);
+  cdr = inject(ChangeDetectorRef);
   wizardItems: WizardItem[] = [
     { tooltip: 'Instrument Details', icon: 'bi bi-card-heading' },
     { tooltip: 'Additional Details', icon: 'bi bi-journals' },
@@ -57,6 +59,7 @@ export class CreateInstrumentComponent implements OnInit, OnDestroy {
             this.imageInfo.imageLocalUrl = imageLocalUrl || '';
             this.imageInfo.imageUrl = imageUrl || '';
             this.showLoader = false;
+            this.cdr.markForCheck();
           },
           error: (e) => {
             console.log(e);

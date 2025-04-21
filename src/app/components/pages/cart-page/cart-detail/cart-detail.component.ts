@@ -1,5 +1,5 @@
 import { AsyncPipe, CurrencyPipe, NgClass } from '@angular/common';
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { CounterInputComponent } from '../../../shared/counter-input/counter-input.component';
 import { FormsModule } from '@angular/forms';
@@ -18,22 +18,20 @@ import { Subscription } from 'rxjs';
   imports: [AsyncPipe, CurrencyPipe, CounterInputComponent, FormsModule, NgbTooltip, NgClass],
   providers: [CartService],
   templateUrl: './cart-detail.component.html',
-  styleUrl: './cart-detail.component.scss'
+  styleUrl: './cart-detail.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CartDetailComponent implements OnInit, OnDestroy {
+export class CartDetailComponent implements OnDestroy {
   store = inject(Store);
   modalService = inject(ModalService);
   storageService = inject(StorageService);
   cartService = inject(CartService);
+  cdr = inject(ChangeDetectorRef);
 
   cartList$ = this.store.select('cartList');
   modalContent: ModalContent = new ModalContent();
   subList: Subscription[] = [];
   cartId: number = 0;
-
-  ngOnInit(): void {
-    
-  }
 
   quantityChanged(value: number, cartItem: CartItem, cartId: number) {
     const updatedCartItem = {

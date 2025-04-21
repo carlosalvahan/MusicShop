@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Instrument } from '../instrument-model';
 import { CurrencyPipe, NgClass } from '@angular/common';
@@ -16,12 +16,14 @@ import { CartService } from '../../cart-page/services/cart-service';
   imports: [CurrencyPipe, CounterInputComponent, FormsModule, NgClass],
   providers: [ CartService],
   templateUrl: './instrument-detail.component.html',
-  styleUrl: './instrument-detail.component.scss'
+  styleUrl: './instrument-detail.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InstrumentDetailComponent implements OnInit, OnDestroy {
   activatedRoute = inject(ActivatedRoute);
   store = inject(Store);
   cartService = inject(CartService);
+  cdr = inject(ChangeDetectorRef);
 
   instrument: Instrument = new Instrument({});
   quantity: number = 1;
@@ -41,7 +43,6 @@ export class InstrumentDetailComponent implements OnInit, OnDestroy {
       }),
       this.store.select('cartList').subscribe(res => {
         this.cartItems = res.cartList;
-        
         this.cartId = res.cartId;
         const itemInCart = this.cartItems.find(item => item.instrumentId === this.instrument.id);
         if(itemInCart) {
@@ -52,6 +53,7 @@ export class InstrumentDetailComponent implements OnInit, OnDestroy {
           this.itemIsInCart = false;
           this.quantity = 1;
         }
+        this.cdr.markForCheck();
       })
     );
   }
@@ -74,8 +76,6 @@ export class InstrumentDetailComponent implements OnInit, OnDestroy {
     if(this.cartItems.length < 1) {
       this.addCartItem(itemAdd);
     } else if(this.itemIsInCart) {
-      console.log(itemAdd);
-      
       this.store.dispatch(CartListAction.updateCartItem({cartItem: itemAdd}));
       this.addCartItem(itemAdd, true);
     } else {

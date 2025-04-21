@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CartDetailComponent } from './cart-detail/cart-detail.component';
 import { Store } from '@ngrx/store';
 import { AsyncPipe, CurrencyPipe } from '@angular/common';
@@ -15,7 +15,8 @@ import { Router } from '@angular/router';
   imports: [CartDetailComponent, AsyncPipe, LoaderComponent, CurrencyPipe],
   providers: [CartService],
   templateUrl: './cart-page.component.html',
-  styleUrl: './cart-page.component.scss'
+  styleUrl: './cart-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CartPageComponent {
   

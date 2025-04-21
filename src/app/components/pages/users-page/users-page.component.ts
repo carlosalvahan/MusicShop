@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ACGridComponent, ButtonOutput } from '../../shared/grid/grid.component';
 import { ColumnModelMapper } from '../../shared/grid/column-model-mapper/column-model-mapper.service';
 import { UserModel } from '../../../store/user/user-model'
@@ -23,7 +23,8 @@ import { UserDetailComponent } from './user-detail/user-detail/user-detail.compo
   imports: [ACGridComponent, AsyncPipe, LoaderComponent, ModalComponent, NgClass, UserDetailComponent],
   templateUrl: './users-page.component.html',
   providers: [ColumnModelMapper, UserListService, NgbModal],
-  styleUrl: './users-page.component.scss'
+  styleUrl: './users-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsersPageComponent extends UnsubClass implements OnInit {
   @ViewChild('userDetailTemplate', { static: false }) userDetailTemplate!: TemplateRef<any>;

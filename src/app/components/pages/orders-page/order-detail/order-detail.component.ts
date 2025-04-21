@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit, output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input, OnInit, output } from '@angular/core';
 import { CartService } from '../../cart-page/services/cart-service';
 import { ProjectionMapper } from '../../../shared/projection-mapper/projection-mapper-service';
 import { CartItem } from '../../../../store/cart/cart-model';
@@ -10,11 +10,14 @@ import { CurrencyPipe } from '@angular/common';
   imports: [CurrencyPipe],
   providers: [CartService, ProjectionMapper],
   templateUrl: './order-detail.component.html',
-  styleUrl: './order-detail.component.scss'
+  styleUrl: './order-detail.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OrderDetailComponent implements OnInit{
   cartService = inject(CartService);
-  projectionMapper = inject(ProjectionMapper)
+  projectionMapper = inject(ProjectionMapper);
+  cdr = inject(ChangeDetectorRef);
+
   cartId = input<number>(0);
   closeModal = output<void>();
  
@@ -26,6 +29,7 @@ export class OrderDetailComponent implements OnInit{
       next: res => { 
         this.orderItems = res.items.map(item => this.projectionMapper.mapProjectionItems<CartItem>(item, 'instrument'));
         this.totalPrice = res.totalPrice;
+        this.cdr.markForCheck();
       }
     })
   }

@@ -1,12 +1,11 @@
 import { NgClass } from '@angular/common';
-import { Component, inject, input, OnInit, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, OnInit, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserModel } from '../../../../../store/user/user-model';
 import { UserListService } from '../../services/user-list.service';
 import { UnsubClass } from '../../../../shared/unsub-components/unsub-class';
 import { ToastService } from '../../../../shared/toast/toast-service';
 import { Store } from '@ngrx/store';
-import { UserActions } from '../../../../../store/user/user-actions';
 import { UserListActions } from '../../../../../store/user-list/user-list-actions';
 
 @Component({
@@ -15,7 +14,8 @@ import { UserListActions } from '../../../../../store/user-list/user-list-action
   imports: [NgClass, ReactiveFormsModule],
   providers: [UserListService],
   templateUrl: './user-detail.component.html',
-  styleUrl: './user-detail.component.scss'
+  styleUrl: './user-detail.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserDetailComponent extends UnsubClass implements OnInit{
   userService = inject(UserListService);

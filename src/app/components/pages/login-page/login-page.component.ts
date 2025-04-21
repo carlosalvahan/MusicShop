@@ -1,5 +1,5 @@
 import { CommonModule, NgClass } from '@angular/common';
-import { Component, inject, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoginService } from './services/login.service';
 import { FormMapper } from '../../shared/form-mapper/form-mapper';
@@ -22,7 +22,8 @@ import { ProjectionMapper } from '../../shared/projection-mapper/projection-mapp
   imports: [ReactiveFormsModule, NgClass, CommonModule],
   providers: [FormMapper, CartService, ProjectionMapper],
   templateUrl: './login-page.component.html',
-  styleUrl: './login-page.component.scss'
+  styleUrl: './login-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginPageComponent implements OnDestroy {
   private store = inject(Store);

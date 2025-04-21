@@ -1,4 +1,4 @@
-import { afterNextRender, Component, inject, OnDestroy, OnInit, PLATFORM_ID, signal, TemplateRef, WritableSignal } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, PLATFORM_ID, signal, TemplateRef, WritableSignal } from '@angular/core';
 import { RouterLinkActive, RouterLink, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
@@ -21,7 +21,8 @@ import { ProjectionMapper } from '../shared/projection-mapper/projection-mapper-
   imports: [RouterLink, RouterLinkActive, CommonModule, NgbDropdownModule, NgbTooltip, CartDetailComponent, CurrencyPipe],
   providers: [CartService, ProjectionMapper],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss'
+  styleUrl: './navbar.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   platformId = inject(PLATFORM_ID);

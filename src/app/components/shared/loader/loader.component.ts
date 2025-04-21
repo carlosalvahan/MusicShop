@@ -1,12 +1,13 @@
 import { NgClass } from "@angular/common";
-import { Component, input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, input } from "@angular/core";
 
 @Component({
     standalone: true,
     templateUrl: './loader.component.html',
     imports: [NgClass],
     styleUrl: './loader.component.scss',
-    selector: 'app-loader'
+    selector: 'app-loader',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoaderComponent {
     placeholder = input<boolean>(false);

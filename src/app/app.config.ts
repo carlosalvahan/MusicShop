@@ -17,7 +17,7 @@ import { UserListEffects } from './store/user-list/user-list-effects';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes, withHashLocation()),
+    provideRouter(routes),
     provideClientHydration(),
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
     provideStore({

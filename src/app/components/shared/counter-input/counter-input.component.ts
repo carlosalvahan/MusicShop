@@ -1,4 +1,4 @@
-import { Component, forwardRef, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, forwardRef, input, output } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, NgModel } from '@angular/forms';
 
 @Component({
@@ -11,24 +11,25 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, NgModel } from '@
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => CounterInputComponent),
     multi: true
-}]
+  }],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CounterInputComponent implements ControlValueAccessor{
-  
+export class CounterInputComponent implements ControlValueAccessor {
+
   maxValue = input<number>(5);
   usingStore = input<boolean>(false);
   storeUpdate = output<number>();
 
   counterValue = 1;
   disableInput: boolean = false;
-  
-  onChange: (_: any) => void = (_: any) => {};
-  onTouched: () => void = () => {};
+
+  onChange: (_: any) => void = (_: any) => { };
+  onTouched: () => void = () => { };
 
   increment() {
-    if(this.counterValue < this.maxValue()) {
+    if (this.counterValue < this.maxValue()) {
       this.counterValue++;
-      if(this.usingStore()) {
+      if (this.usingStore()) {
         this.storeUpdate.emit(this.counterValue);
       } else {
         this.onChange(this.counterValue);
@@ -37,9 +38,9 @@ export class CounterInputComponent implements ControlValueAccessor{
   }
 
   decrement() {
-    if(this.counterValue > 1) {
+    if (this.counterValue > 1) {
       this.counterValue--;
-      if(this.usingStore()) {
+      if (this.usingStore()) {
         this.storeUpdate.emit(this.counterValue);
       } else {
         this.onChange(this.counterValue);

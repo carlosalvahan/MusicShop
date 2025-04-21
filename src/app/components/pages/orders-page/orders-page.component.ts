@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { OrderService } from './services/order-service';
 import { StorageService } from '../../shared/storage/storage-service';
 import { sessionKeys } from '../../../app.constants';
@@ -22,7 +22,8 @@ import { UserDetailComponent } from '../users-page/user-detail/user-detail/user-
   imports: [ACGridComponent, NgClass, LoaderComponent, OrderDetailComponent, UserDetailComponent],
   providers: [OrderService, ColumnModelMapper, NgbModal],
   templateUrl: './orders-page.component.html',
-  styleUrl: './orders-page.component.scss'
+  styleUrl: './orders-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OrdersPageComponent implements OnInit, OnDestroy{
   @ViewChild('orderItems', { static: false }) orderDetailTemplate!: TemplateRef<any>;
@@ -32,6 +33,7 @@ export class OrdersPageComponent implements OnInit, OnDestroy{
   storageService = inject(StorageService);
   modalService = inject(NgbModal);
   mapper = inject(ColumnModelMapper);
+  cdr = inject(ChangeDetectorRef);
 
   subList: Subscription[] = [];
   colData: ColDef[] = [];
@@ -61,6 +63,7 @@ export class OrdersPageComponent implements OnInit, OnDestroy{
         next: res => {
           this.rowData = Object.assign([], res);
           this.showLoader = false;
+          this.cdr.markForCheck();
         }
       })
     );

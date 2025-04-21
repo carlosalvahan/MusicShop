@@ -1,5 +1,5 @@
 import { NgClass, NgStyle } from '@angular/common';
-import { Component, input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, OnInit } from '@angular/core';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -7,7 +7,8 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
   standalone: true,
   imports: [NgClass, NgbTooltip, NgStyle],
   templateUrl: './wizard.component.html',
-  styleUrl: './wizard.component.scss'
+  styleUrl: './wizard.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WizardComponent implements OnInit{
   wizardItems = input<WizardItem[]>([]);

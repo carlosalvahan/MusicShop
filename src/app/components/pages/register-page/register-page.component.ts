@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, OnDestroy, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, TemplateRef } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { RegisterService } from './services/register.service';
 import { ToastService } from '../../shared/toast/toast-service';
@@ -13,7 +13,8 @@ import { Subscription } from 'rxjs';
   imports: [ReactiveFormsModule, NgClass],
   providers: [RegisterService, FormMapper],
   templateUrl: './register-page.component.html',
-  styleUrl: './register-page.component.scss'
+  styleUrl: './register-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterPageComponent implements OnDestroy{
   subList: Subscription[] = [];

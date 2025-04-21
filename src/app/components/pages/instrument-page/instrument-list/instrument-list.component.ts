@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { InstrumentItemComponent } from '../instrument-item/instrument-item.component';
 import { Observable, Subscription } from 'rxjs';
 import { UserModel } from '../../../../store/user/user-model';
@@ -19,7 +19,8 @@ import { ToastService } from '../../../shared/toast/toast-service';
   imports: [InstrumentItemComponent, AsyncPipe, CreateInstrumentComponent],
   providers: [NgbModal],
   templateUrl: './instrument-list.component.html',
-  styleUrl: './instrument-list.component.scss'
+  styleUrl: './instrument-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InstrumentListComponent extends UnsubClass implements OnInit {
   loggedInUser$!: Observable<UserModel>;
@@ -28,6 +29,7 @@ export class InstrumentListComponent extends UnsubClass implements OnInit {
   modalService = inject(NgbModal);
   instrumentService = inject(InstrumentService);
   toastService = inject(ToastService);
+  cdr = inject(ChangeDetectorRef);
 
   instrumentList: Instrument[] = [];
   displayList: Instrument[] = [];
@@ -64,6 +66,7 @@ export class InstrumentListComponent extends UnsubClass implements OnInit {
             });
             return filterCondition.every(Boolean);
           });
+          this.cdr.markForCheck();
         }
       })
     );
@@ -118,6 +121,7 @@ export class InstrumentListComponent extends UnsubClass implements OnInit {
             this.store.dispatch(FilterListActions.updateSearchText({searchTxt: this.searchText}))
           }
           this.instrumentLoading = false;
+          this.cdr.markForCheck();
         },
         error: e => {
           this.instrumentLoading = false;

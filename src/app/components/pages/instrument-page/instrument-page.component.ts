@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { SideFilterComponent } from '../../shared/side-filter/side-filter.component';
 import { InstrumentService } from './services/instrument-service';
 import { forkJoin, Observable, Subscription } from 'rxjs';
@@ -13,7 +13,8 @@ import { FilterListActions } from '../../../store/filters/filter-actions';
   imports: [SideFilterComponent, InstrumentListComponent],
   templateUrl: './instrument-page.component.html',
   providers: [InstrumentService],
-  styleUrl: './instrument-page.component.scss'
+  styleUrl: './instrument-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InstrumentPageComponent implements OnInit, OnDestroy{
   instrumentService = inject(InstrumentService);

@@ -1,5 +1,5 @@
 import { CommonModule, NgClass } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoginService } from './services/login.service';
 import { FormMapper } from '../../shared/form-mapper/form-mapper';
@@ -29,6 +29,7 @@ export class LoginPageComponent implements OnDestroy {
   private store = inject(Store);
   cartService = inject(CartService);
   projectionMapper = inject(ProjectionMapper);
+  cdr = inject(ChangeDetectorRef);
   subList: Subscription[] = [];
   constructor(private loginService: LoginService,
     private formMapper: FormMapper,
@@ -69,9 +70,11 @@ export class LoginPageComponent implements OnDestroy {
             this.router.navigateByUrl('instruments');
           }
           console.log(res, userPerm.role);
+          this.cdr.markForCheck();
         },
         error: (e) => {
           this.showToast(e.error.message, 'danger');
+          this.cdr.markForCheck();
           this.showLoader = false
         }
       })
